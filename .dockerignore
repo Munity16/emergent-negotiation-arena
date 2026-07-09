@@ -1,0 +1,22 @@
+# Keep build context clean — caches and local artefacts stay out of the image
+__pycache__/
+**/__pycache__/
+*.pyc
+.pytest_cache/
+**/.pytest_cache/
+.venv/
+venv/
+*.log
+
+# Runtime outputs stay out of the image, EXCEPT the recorded sample run that
+# powers the no-key replay demo inside the container.
+outputs/*
+!outputs/sample_run.json
+!outputs/sample_vocabulary.json
+!outputs/sample_benchmark.json
+!outputs/sample_fireworks_run.json
+!outputs/sample_fireworks_vocabulary.json
+
+# Never bake secrets into images
+.env
+.env.*

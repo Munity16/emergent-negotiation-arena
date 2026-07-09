@@ -1,0 +1,456 @@
+{
+  "summary": {
+    "total_symbols": 8,
+    "stable_words": 5,
+    "convergence_events": 4,
+    "extinction_events": 8,
+    "most_stable_symbol": "EW2",
+    "vocabulary_growth": [
+      {
+        "round": 0,
+        "unique_symbols": 0
+      },
+      {
+        "round": 1,
+        "unique_symbols": 0
+      },
+      {
+        "round": 2,
+        "unique_symbols": 0
+      },
+      {
+        "round": 3,
+        "unique_symbols": 1
+      },
+      {
+        "round": 4,
+        "unique_symbols": 2
+      },
+      {
+        "round": 5,
+        "unique_symbols": 3
+      },
+      {
+        "round": 6,
+        "unique_symbols": 3
+      },
+      {
+        "round": 7,
+        "unique_symbols": 3
+      },
+      {
+        "round": 8,
+        "unique_symbols": 3
+      },
+      {
+        "round": 9,
+        "unique_symbols": 4
+      },
+      {
+        "round": 10,
+        "unique_symbols": 4
+      },
+      {
+        "round": 11,
+        "unique_symbols": 5
+      },
+      {
+        "round": 12,
+        "unique_symbols": 5
+      },
+      {
+        "round": 13,
+        "unique_symbols": 6
+      },
+      {
+        "round": 14,
+        "unique_symbols": 7
+      },
+      {
+        "round": 15,
+        "unique_symbols": 7
+      },
+      {
+        "round": 16,
+        "unique_symbols": 7
+      },
+      {
+        "round": 17,
+        "unique_symbols": 7
+      },
+      {
+        "round": 18,
+        "unique_symbols": 7
+      },
+      {
+        "round": 19,
+        "unique_symbols": 7
+      },
+      {
+        "round": 20,
+        "unique_symbols": 7
+      },
+      {
+        "round": 21,
+        "unique_symbols": 7
+      },
+      {
+        "round": 22,
+        "unique_symbols": 7
+      },
+      {
+        "round": 23,
+        "unique_symbols": 7
+      },
+      {
+        "round": 24,
+        "unique_symbols": 7
+      },
+      {
+        "round": 25,
+        "unique_symbols": 7
+      },
+      {
+        "round": 26,
+        "unique_symbols": 7
+      },
+      {
+        "round": 27,
+        "unique_symbols": 8
+      },
+      {
+        "round": 28,
+        "unique_symbols": 8
+      },
+      {
+        "round": 29,
+        "unique_symbols": 8
+      },
+      {
+        "round": 30,
+        "unique_symbols": 8
+      },
+      {
+        "round": 31,
+        "unique_symbols": 8
+      },
+      {
+        "round": 32,
+        "unique_symbols": 8
+      },
+      {
+        "round": 33,
+        "unique_symbols": 8
+      },
+      {
+        "round": 34,
+        "unique_symbols": 8
+      },
+      {
+        "round": 35,
+        "unique_symbols": 8
+      },
+      {
+        "round": 36,
+        "unique_symbols": 8
+      },
+      {
+        "round": 37,
+        "unique_symbols": 8
+      },
+      {
+        "round": 38,
+        "unique_symbols": 8
+      },
+      {
+        "round": 39,
+        "unique_symbols": 8
+      },
+      {
+        "round": 40,
+        "unique_symbols": 8
+      },
+      {
+        "round": 41,
+        "unique_symbols": 8
+      },
+      {
+        "round": 42,
+        "unique_symbols": 8
+      },
+      {
+        "round": 43,
+        "unique_symbols": 8
+      },
+      {
+        "round": 44,
+        "unique_symbols": 8
+      },
+      {
+        "round": 45,
+        "unique_symbols": 8
+      },
+      {
+        "round": 46,
+        "unique_symbols": 8
+      },
+      {
+        "round": 47,
+        "unique_symbols": 8
+      },
+      {
+        "round": 48,
+        "unique_symbols": 8
+      },
+      {
+        "round": 49,
+        "unique_symbols": 8
+      },
+      {
+        "round": 50,
+        "unique_symbols": 8
+      },
+      {
+        "round": 51,
+        "unique_symbols": 8
+      },
+      {
+        "round": 52,
+        "unique_symbols": 8
+      },
+      {
+        "round": 53,
+        "unique_symbols": 8
+      },
+      {
+        "round": 54,
+        "unique_symbols": 8
+      },
+      {
+        "round": 55,
+        "unique_symbols": 8
+      },
+      {
+        "round": 56,
+        "unique_symbols": 8
+      },
+      {
+        "round": 57,
+        "unique_symbols": 8
+      },
+      {
+        "round": 58,
+        "unique_symbols": 8
+      },
+      {
+        "round": 59,
+        "unique_symbols": 8
+      }
+    ]
+  },
+  "vocabulary": [
+    {
+      "symbol": "FW0",
+      "first_used_by": "agent_0",
+      "first_used_round": 3,
+      "usage_count": 1,
+      "success_rate": 0.0,
+      "stability_score": 0.144,
+      "adopters": [
+        "agent_0"
+      ],
+      "dominant_context": "food\u2192water",
+      "inferred_meaning": null
+    },
+    {
+      "symbol": "NAK",
+      "first_used_by": "agent_2",
+      "first_used_round": 3,
+      "usage_count": 10,
+      "success_rate": 0.0,
+      "stability_score": 0.667,
+      "adopters": [
+        "agent_0",
+        "agent_1",
+        "agent_2"
+      ],
+      "dominant_context": null,
+      "inferred_meaning": null
+    },
+    {
+      "symbol": "ME0",
+      "first_used_by": "agent_0",
+      "first_used_round": 5,
+      "usage_count": 1,
+      "success_rate": 0.0,
+      "stability_score": 0.144,
+      "adopters": [
+        "agent_0"
+      ],
+      "dominant_context": "metal\u2192energy",
+      "inferred_meaning": null
+    },
+    {
+      "symbol": "WE1",
+      "first_used_by": "agent_1",
+      "first_used_round": 9,
+      "usage_count": 1,
+      "success_rate": 1.0,
+      "stability_score": 0.589,
+      "adopters": [
+        "agent_0",
+        "agent_1"
+      ],
+      "dominant_context": "water\u2192energy",
+      "inferred_meaning": null
+    },
+    {
+      "symbol": "EW2",
+      "first_used_by": "agent_2",
+      "first_used_round": 11,
+      "usage_count": 9,
+      "success_rate": 0.444,
+      "stability_score": 0.781,
+      "adopters": [
+        "agent_0",
+        "agent_1",
+        "agent_2"
+      ],
+      "dominant_context": "energy\u2192water",
+      "inferred_meaning": null
+    },
+    {
+      "symbol": "FE2",
+      "first_used_by": "agent_2",
+      "first_used_round": 13,
+      "usage_count": 1,
+      "success_rate": 1.0,
+      "stability_score": 0.589,
+      "adopters": [
+        "agent_0",
+        "agent_2"
+      ],
+      "dominant_context": "food\u2192energy",
+      "inferred_meaning": null
+    },
+    {
+      "symbol": "WE2",
+      "first_used_by": "agent_2",
+      "first_used_round": 14,
+      "usage_count": 4,
+      "success_rate": 0.75,
+      "stability_score": 0.606,
+      "adopters": [
+        "agent_0",
+        "agent_2"
+      ],
+      "dominant_context": "water\u2192energy",
+      "inferred_meaning": null
+    },
+    {
+      "symbol": "MF0",
+      "first_used_by": "agent_0",
+      "first_used_round": 27,
+      "usage_count": 2,
+      "success_rate": 0.0,
+      "stability_score": 0.178,
+      "adopters": [
+        "agent_0"
+      ],
+      "dominant_context": "metal\u2192food",
+      "inferred_meaning": null
+    }
+  ],
+  "convergence_events": [
+    {
+      "symbol": "WE1",
+      "round": 10,
+      "adopters": [
+        "agent_0",
+        "agent_1"
+      ],
+      "context": "water\u2192energy",
+      "stability": 0.589
+    },
+    {
+      "symbol": "EW2",
+      "round": 12,
+      "adopters": [
+        "agent_1",
+        "agent_2"
+      ],
+      "context": "energy\u2192water",
+      "stability": 0.589
+    },
+    {
+      "symbol": "FE2",
+      "round": 14,
+      "adopters": [
+        "agent_0",
+        "agent_2"
+      ],
+      "context": "food\u2192energy",
+      "stability": 0.589
+    },
+    {
+      "symbol": "WE2",
+      "round": 15,
+      "adopters": [
+        "agent_0",
+        "agent_2"
+      ],
+      "context": "water\u2192energy",
+      "stability": 0.589
+    }
+  ],
+  "extinction_events": [
+    {
+      "symbol": "FW0",
+      "round_extinct": 13,
+      "total_uses": 1,
+      "max_stability": 0.144
+    },
+    {
+      "symbol": "NAK",
+      "round_extinct": 13,
+      "total_uses": 2,
+      "max_stability": 0.289
+    },
+    {
+      "symbol": "ME0",
+      "round_extinct": 15,
+      "total_uses": 1,
+      "max_stability": 0.144
+    },
+    {
+      "symbol": "WE1",
+      "round_extinct": 19,
+      "total_uses": 1,
+      "max_stability": 0.589
+    },
+    {
+      "symbol": "FE2",
+      "round_extinct": 23,
+      "total_uses": 1,
+      "max_stability": 0.589
+    },
+    {
+      "symbol": "WE2",
+      "round_extinct": 31,
+      "total_uses": 4,
+      "max_stability": 0.606
+    },
+    {
+      "symbol": "EW2",
+      "round_extinct": 34,
+      "total_uses": 9,
+      "max_stability": 0.781
+    },
+    {
+      "symbol": "MF0",
+      "round_extinct": 39,
+      "total_uses": 2,
+      "max_stability": 0.178
+    }
+  ]
+}

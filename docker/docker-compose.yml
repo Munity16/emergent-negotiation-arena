@@ -1,0 +1,37 @@
+# ─────────────────────────────────────────────────────────
+# docker-compose.yml — Emergent Negotiation Arena
+#
+# One service: the simulation + Gradio UI.
+#
+# LLM agents (Fireworks AI API):
+#   AGENT_BACKEND=fireworks FIREWORKS_API_KEY=xxx \
+#   docker compose -f docker/docker-compose.yml up
+#
+# No key (rule-based demo / recorded replay):
+#   AGENT_BACKEND=heuristic docker compose -f docker/docker-compose.yml up
+#   AGENT_BACKEND=replay    docker compose -f docker/docker-compose.yml up
+#
+# Default AGENT_BACKEND=auto picks fireworks when a key is present,
+# otherwise falls back to replay/heuristic — the container always works.
+# ─────────────────────────────────────────────────────────
+
+version: "3.9"
+
+services:
+
+  arena:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: emergent-arena
+    environment:
+      - AGENT_BACKEND=${AGENT_BACKEND:-auto}
+      - FIREWORKS_API_KEY=${FIREWORKS_API_KEY:-}
+      - FIREWORKS_MODEL=${FIREWORKS_MODEL:-}
+    ports:
+      - "7860:7860"
+    volumes:
+      # This compose file lives inside docker/, so the project outputs dir is
+      # one level up — ./outputs would silently write to docker/outputs.
+      - ../outputs:/app/outputs
+    restart: unless-stopped

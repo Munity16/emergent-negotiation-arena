@@ -1,0 +1,140 @@
+{
+  "summary": {
+    "total_symbols": 3,
+    "stable_words": 3,
+    "convergence_events": 3,
+    "extinction_events": 0,
+    "most_stable_symbol": "Z1",
+    "vocabulary_growth": [
+      {
+        "round": 0,
+        "unique_symbols": 0
+      },
+      {
+        "round": 1,
+        "unique_symbols": 0
+      },
+      {
+        "round": 2,
+        "unique_symbols": 0
+      },
+      {
+        "round": 3,
+        "unique_symbols": 0
+      },
+      {
+        "round": 4,
+        "unique_symbols": 0
+      },
+      {
+        "round": 5,
+        "unique_symbols": 0
+      },
+      {
+        "round": 6,
+        "unique_symbols": 0
+      },
+      {
+        "round": 7,
+        "unique_symbols": 0
+      },
+      {
+        "round": 8,
+        "unique_symbols": 1
+      },
+      {
+        "round": 9,
+        "unique_symbols": 1
+      },
+      {
+        "round": 10,
+        "unique_symbols": 2
+      },
+      {
+        "round": 11,
+        "unique_symbols": 3
+      },
+      {
+        "round": 12,
+        "unique_symbols": 3
+      }
+    ]
+  },
+  "vocabulary": [
+    {
+      "symbol": "Z1",
+      "first_used_by": "agent_0",
+      "first_used_round": 8,
+      "usage_count": 2,
+      "success_rate": 1.0,
+      "stability_score": 0.622,
+      "adopters": [
+        "agent_0",
+        "agent_1"
+      ],
+      "dominant_context": "water\u2192metal",
+      "inferred_meaning": null
+    },
+    {
+      "symbol": "Z2",
+      "first_used_by": "agent_0",
+      "first_used_round": 10,
+      "usage_count": 1,
+      "success_rate": 1.0,
+      "stability_score": 0.589,
+      "adopters": [
+        "agent_0",
+        "agent_1"
+      ],
+      "dominant_context": "water\u2192metal",
+      "inferred_meaning": null
+    },
+    {
+      "symbol": "W2F",
+      "first_used_by": "agent_0",
+      "first_used_round": 11,
+      "usage_count": 1,
+      "success_rate": 1.0,
+      "stability_score": 0.589,
+      "adopters": [
+        "agent_0",
+        "agent_1"
+      ],
+      "dominant_context": "water\u2192food",
+      "inferred_meaning": null
+    }
+  ],
+  "convergence_events": [
+    {
+      "symbol": "Z1",
+      "round": 8,
+      "adopters": [
+        "agent_0",
+        "agent_1"
+      ],
+      "context": "water\u2192metal",
+      "stability": 0.289
+    },
+    {
+      "symbol": "Z2",
+      "round": 11,
+      "adopters": [
+        "agent_0",
+        "agent_1"
+      ],
+      "context": "water\u2192metal",
+      "stability": 0.589
+    },
+    {
+      "symbol": "W2F",
+      "round": 12,
+      "adopters": [
+        "agent_0",
+        "agent_1"
+      ],
+      "context": "water\u2192food",
+      "stability": 0.589
+    }
+  ],
+  "extinction_events": []
+}

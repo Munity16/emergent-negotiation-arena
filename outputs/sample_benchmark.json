@@ -1,0 +1,554 @@
+{
+  "summary": {
+    "total_rounds": 60,
+    "avg_parallel_inference_ms": 0.2,
+    "avg_sequential_estimate_ms": 0.6,
+    "parallel_speedup_factor": 3.0,
+    "total_trades_attempted": 19,
+    "total_trades_succeeded": 9,
+    "total_symbols_invented": 8,
+    "note": "Sequential estimate = parallel_time \u00d7 3 (if agents ran one-at-a-time)"
+  },
+  "per_round": [
+    {
+      "round_number": 0,
+      "parallel_inference_ms": 1.1774999984481838,
+      "sequential_estimate_ms": 3.5324999953445513,
+      "trades_attempted": 0,
+      "trades_succeeded": 0,
+      "new_symbols": 0,
+      "alive_agents": 3
+    },
+    {
+      "round_number": 1,
+      "parallel_inference_ms": 0.22470000112662092,
+      "sequential_estimate_ms": 0.6741000033798628,
+      "trades_attempted": 0,
+      "trades_succeeded": 0,
+      "new_symbols": 0,
+      "alive_agents": 3
+    },
+    {
+      "round_number": 2,
+      "parallel_inference_ms": 0.16590000086580403,
+      "sequential_estimate_ms": 0.4977000025974121,
+      "trades_attempted": 0,
+      "trades_succeeded": 0,
+      "new_symbols": 0,
+      "alive_agents": 3
+    },
+    {
+      "round_number": 3,
+      "parallel_inference_ms": 0.17149999985122122,
+      "sequential_estimate_ms": 0.5144999995536637,
+      "trades_attempted": 1,
+      "trades_succeeded": 0,
+      "new_symbols": 1,
+      "alive_agents": 3
+    },
+    {
+      "round_number": 4,
+      "parallel_inference_ms": 0.29540000105043873,
+      "sequential_estimate_ms": 0.8862000031513162,
+      "trades_attempted": 0,
+      "trades_succeeded": 0,
+      "new_symbols": 2,
+      "alive_agents": 3
+    },
+    {
+      "round_number": 5,
+      "parallel_inference_ms": 0.54430000091088,
+      "sequential_estimate_ms": 1.6329000027326401,
+      "trades_attempted": 1,
+      "trades_succeeded": 0,
+      "new_symbols": 3,
+      "alive_agents": 3
+    },
+    {
+      "round_number": 6,
+      "parallel_inference_ms": 0.19350000002305023,
+      "sequential_estimate_ms": 0.5805000000691507,
+      "trades_attempted": 0,
+      "trades_succeeded": 0,
+      "new_symbols": 3,
+      "alive_agents": 3
+    },
+    {
+      "round_number": 7,
+      "parallel_inference_ms": 0.16289999985019676,
+      "sequential_estimate_ms": 0.4886999995505903,
+      "trades_attempted": 0,
+      "trades_succeeded": 0,
+      "new_symbols": 3,
+      "alive_agents": 3
+    },
+    {
+      "round_number": 8,
+      "parallel_inference_ms": 0.14289999671746045,
+      "sequential_estimate_ms": 0.42869999015238136,
+      "trades_attempted": 0,
+      "trades_succeeded": 0,
+      "new_symbols": 3,
+      "alive_agents": 3
+    },
+    {
+      "round_number": 9,
+      "parallel_inference_ms": 0.2624000007926952,
+      "sequential_estimate_ms": 0.7872000023780856,
+      "trades_attempted": 1,
+      "trades_succeeded": 0,
+      "new_symbols": 4,
+      "alive_agents": 3
+    },
+    {
+      "round_number": 10,
+      "parallel_inference_ms": 0.5898000017623417,
+      "sequential_estimate_ms": 1.7694000052870251,
+      "trades_attempted": 0,
+      "trades_succeeded": 1,
+      "new_symbols": 4,
+      "alive_agents": 3
+    },
+    {
+      "round_number": 11,
+      "parallel_inference_ms": 0.24990000019897707,
+      "sequential_estimate_ms": 0.7497000005969312,
+      "trades_attempted": 1,
+      "trades_succeeded": 0,
+      "new_symbols": 5,
+      "alive_agents": 3
+    },
+    {
+      "round_number": 12,
+      "parallel_inference_ms": 0.19049999900744297,
+      "sequential_estimate_ms": 0.5714999970223289,
+      "trades_attempted": 1,
+      "trades_succeeded": 1,
+      "new_symbols": 5,
+      "alive_agents": 3
+    },
+    {
+      "round_number": 13,
+      "parallel_inference_ms": 0.1956999985850416,
+      "sequential_estimate_ms": 0.5870999957551248,
+      "trades_attempted": 1,
+      "trades_succeeded": 1,
+      "new_symbols": 6,
+      "alive_agents": 3
+    },
+    {
+      "round_number": 14,
+      "parallel_inference_ms": 0.1742999993439298,
+      "sequential_estimate_ms": 0.5228999980317894,
+      "trades_attempted": 1,
+      "trades_succeeded": 1,
+      "new_symbols": 7,
+      "alive_agents": 3
+    },
+    {
+      "round_number": 15,
+      "parallel_inference_ms": 0.16289999985019676,
+      "sequential_estimate_ms": 0.4886999995505903,
+      "trades_attempted": 1,
+      "trades_succeeded": 1,
+      "new_symbols": 7,
+      "alive_agents": 3
+    },
+    {
+      "round_number": 16,
+      "parallel_inference_ms": 0.15839999832678586,
+      "sequential_estimate_ms": 0.4751999949803576,
+      "trades_attempted": 1,
+      "trades_succeeded": 1,
+      "new_symbols": 7,
+      "alive_agents": 3
+    },
+    {
+      "round_number": 17,
+      "parallel_inference_ms": 0.167199999850709,
+      "sequential_estimate_ms": 0.501599999552127,
+      "trades_attempted": 1,
+      "trades_succeeded": 1,
+      "new_symbols": 7,
+      "alive_agents": 3
+    },
+    {
+      "round_number": 18,
+      "parallel_inference_ms": 0.23429999782820232,
+      "sequential_estimate_ms": 0.702899993484607,
+      "trades_attempted": 1,
+      "trades_succeeded": 0,
+      "new_symbols": 7,
+      "alive_agents": 3
+    },
+    {
+      "round_number": 19,
+      "parallel_inference_ms": 0.1640999980736524,
+      "sequential_estimate_ms": 0.49229999422095716,
+      "trades_attempted": 1,
+      "trades_succeeded": 1,
+      "new_symbols": 7,
+      "alive_agents": 3
+    },
+    {
+      "round_number": 20,
+      "parallel_inference_ms": 0.15979999807314016,
+      "sequential_estimate_ms": 0.4793999942194205,
+      "trades_attempted": 1,
+      "trades_succeeded": 0,
+      "new_symbols": 7,
+      "alive_agents": 3
+    },
+    {
+      "round_number": 21,
+      "parallel_inference_ms": 0.4071000003023073,
+      "sequential_estimate_ms": 1.221300000906922,
+      "trades_attempted": 1,
+      "trades_succeeded": 1,
+      "new_symbols": 7,
+      "alive_agents": 3
+    },
+    {
+      "round_number": 22,
+      "parallel_inference_ms": 0.24900000062189065,
+      "sequential_estimate_ms": 0.747000001865672,
+      "trades_attempted": 1,
+      "trades_succeeded": 0,
+      "new_symbols": 7,
+      "alive_agents": 3
+    },
+    {
+      "round_number": 23,
+      "parallel_inference_ms": 0.17160000061267056,
+      "sequential_estimate_ms": 0.5148000018380117,
+      "trades_attempted": 1,
+      "trades_succeeded": 0,
+      "new_symbols": 7,
+      "alive_agents": 3
+    },
+    {
+      "round_number": 24,
+      "parallel_inference_ms": 0.16569999934290536,
+      "sequential_estimate_ms": 0.4970999980287161,
+      "trades_attempted": 1,
+      "trades_succeeded": 0,
+      "new_symbols": 7,
+      "alive_agents": 2
+    },
+    {
+      "round_number": 25,
+      "parallel_inference_ms": 0.11950000043725595,
+      "sequential_estimate_ms": 0.35850000131176785,
+      "trades_attempted": 0,
+      "trades_succeeded": 0,
+      "new_symbols": 7,
+      "alive_agents": 2
+    },
+    {
+      "round_number": 26,
+      "parallel_inference_ms": 0.11639999866019934,
+      "sequential_estimate_ms": 0.34919999598059803,
+      "trades_attempted": 0,
+      "trades_succeeded": 0,
+      "new_symbols": 7,
+      "alive_agents": 2
+    },
+    {
+      "round_number": 27,
+      "parallel_inference_ms": 0.1574000016262289,
+      "sequential_estimate_ms": 0.47220000487868674,
+      "trades_attempted": 1,
+      "trades_succeeded": 0,
+      "new_symbols": 8,
+      "alive_agents": 2
+    },
+    {
+      "round_number": 28,
+      "parallel_inference_ms": 0.1083999995898921,
+      "sequential_estimate_ms": 0.3251999987696763,
+      "trades_attempted": 0,
+      "trades_succeeded": 0,
+      "new_symbols": 8,
+      "alive_agents": 2
+    },
+    {
+      "round_number": 29,
+      "parallel_inference_ms": 0.139899999339832,
+      "sequential_estimate_ms": 0.419699998019496,
+      "trades_attempted": 1,
+      "trades_succeeded": 0,
+      "new_symbols": 8,
+      "alive_agents": 2
+    },
+    {
+      "round_number": 30,
+      "parallel_inference_ms": 0.1201999984914437,
+      "sequential_estimate_ms": 0.3605999954743311,
+      "trades_attempted": 0,
+      "trades_succeeded": 0,
+      "new_symbols": 8,
+      "alive_agents": 2
+    },
+    {
+      "round_number": 31,
+      "parallel_inference_ms": 0.11960000119870529,
+      "sequential_estimate_ms": 0.35880000359611586,
+      "trades_attempted": 0,
+      "trades_succeeded": 0,
+      "new_symbols": 8,
+      "alive_agents": 2
+    },
+    {
+      "round_number": 32,
+      "parallel_inference_ms": 0.12060000153724104,
+      "sequential_estimate_ms": 0.3618000046117231,
+      "trades_attempted": 0,
+      "trades_succeeded": 0,
+      "new_symbols": 8,
+      "alive_agents": 2
+    },
+    {
+      "round_number": 33,
+      "parallel_inference_ms": 0.12299999798415229,
+      "sequential_estimate_ms": 0.36899999395245686,
+      "trades_attempted": 0,
+      "trades_succeeded": 0,
+      "new_symbols": 8,
+      "alive_agents": 2
+    },
+    {
+      "round_number": 34,
+      "parallel_inference_ms": 0.12259999857633375,
+      "sequential_estimate_ms": 0.36779999572900124,
+      "trades_attempted": 0,
+      "trades_succeeded": 0,
+      "new_symbols": 8,
+      "alive_agents": 2
+    },
+    {
+      "round_number": 35,
+      "parallel_inference_ms": 0.12200000128359534,
+      "sequential_estimate_ms": 0.366000003850786,
+      "trades_attempted": 0,
+      "trades_succeeded": 0,
+      "new_symbols": 8,
+      "alive_agents": 2
+    },
+    {
+      "round_number": 36,
+      "parallel_inference_ms": 0.11729999823728576,
+      "sequential_estimate_ms": 0.3518999947118573,
+      "trades_attempted": 0,
+      "trades_succeeded": 0,
+      "new_symbols": 8,
+      "alive_agents": 2
+    },
+    {
+      "round_number": 37,
+      "parallel_inference_ms": 0.12459999925340526,
+      "sequential_estimate_ms": 0.3737999977602158,
+      "trades_attempted": 0,
+      "trades_succeeded": 0,
+      "new_symbols": 8,
+      "alive_agents": 2
+    },
+    {
+      "round_number": 38,
+      "parallel_inference_ms": 0.12999999671592377,
+      "sequential_estimate_ms": 0.3899999901477713,
+      "trades_attempted": 0,
+      "trades_succeeded": 0,
+      "new_symbols": 8,
+      "alive_agents": 2
+    },
+    {
+      "round_number": 39,
+      "parallel_inference_ms": 0.12259999857633375,
+      "sequential_estimate_ms": 0.36779999572900124,
+      "trades_attempted": 0,
+      "trades_succeeded": 0,
+      "new_symbols": 8,
+      "alive_agents": 2
+    },
+    {
+      "round_number": 40,
+      "parallel_inference_ms": 0.11669999730656855,
+      "sequential_estimate_ms": 0.35009999191970564,
+      "trades_attempted": 0,
+      "trades_succeeded": 0,
+      "new_symbols": 8,
+      "alive_agents": 2
+    },
+    {
+      "round_number": 41,
+      "parallel_inference_ms": 0.37289999818312936,
+      "sequential_estimate_ms": 1.118699994549388,
+      "trades_attempted": 0,
+      "trades_succeeded": 0,
+      "new_symbols": 8,
+      "alive_agents": 2
+    },
+    {
+      "round_number": 42,
+      "parallel_inference_ms": 0.20560000120894983,
+      "sequential_estimate_ms": 0.6168000036268495,
+      "trades_attempted": 0,
+      "trades_succeeded": 0,
+      "new_symbols": 8,
+      "alive_agents": 2
+    },
+    {
+      "round_number": 43,
+      "parallel_inference_ms": 0.14689999807160348,
+      "sequential_estimate_ms": 0.44069999421481043,
+      "trades_attempted": 0,
+      "trades_succeeded": 0,
+      "new_symbols": 8,
+      "alive_agents": 2
+    },
+    {
+      "round_number": 44,
+      "parallel_inference_ms": 0.1331999992544297,
+      "sequential_estimate_ms": 0.39959999776328914,
+      "trades_attempted": 0,
+      "trades_succeeded": 0,
+      "new_symbols": 8,
+      "alive_agents": 2
+    },
+    {
+      "round_number": 45,
+      "parallel_inference_ms": 0.1201999984914437,
+      "sequential_estimate_ms": 0.3605999954743311,
+      "trades_attempted": 0,
+      "trades_succeeded": 0,
+      "new_symbols": 8,
+      "alive_agents": 2
+    },
+    {
+      "round_number": 46,
+      "parallel_inference_ms": 0.32920000012381934,
+      "sequential_estimate_ms": 0.987600000371458,
+      "trades_attempted": 0,
+      "trades_succeeded": 0,
+      "new_symbols": 8,
+      "alive_agents": 2
+    },
+    {
+      "round_number": 47,
+      "parallel_inference_ms": 0.15799999891896732,
+      "sequential_estimate_ms": 0.47399999675690196,
+      "trades_attempted": 0,
+      "trades_succeeded": 0,
+      "new_symbols": 8,
+      "alive_agents": 2
+    },
+    {
+      "round_number": 48,
+      "parallel_inference_ms": 0.12380000043776818,
+      "sequential_estimate_ms": 0.37140000131330453,
+      "trades_attempted": 0,
+      "trades_succeeded": 0,
+      "new_symbols": 8,
+      "alive_agents": 2
+    },
+    {
+      "round_number": 49,
+      "parallel_inference_ms": 0.12249999781488441,
+      "sequential_estimate_ms": 0.36749999344465323,
+      "trades_attempted": 0,
+      "trades_succeeded": 0,
+      "new_symbols": 8,
+      "alive_agents": 2
+    },
+    {
+      "round_number": 50,
+      "parallel_inference_ms": 0.1221999991685152,
+      "sequential_estimate_ms": 0.3665999975055456,
+      "trades_attempted": 0,
+      "trades_succeeded": 0,
+      "new_symbols": 8,
+      "alive_agents": 2
+    },
+    {
+      "round_number": 51,
+      "parallel_inference_ms": 0.20140000196988694,
+      "sequential_estimate_ms": 0.6042000059096608,
+      "trades_attempted": 0,
+      "trades_succeeded": 0,
+      "new_symbols": 8,
+      "alive_agents": 2
+    },
+    {
+      "round_number": 52,
+      "parallel_inference_ms": 0.13979999857838266,
+      "sequential_estimate_ms": 0.41939999573514797,
+      "trades_attempted": 0,
+      "trades_succeeded": 0,
+      "new_symbols": 8,
+      "alive_agents": 2
+    },
+    {
+      "round_number": 53,
+      "parallel_inference_ms": 0.44209999759914353,
+      "sequential_estimate_ms": 1.3262999927974306,
+      "trades_attempted": 0,
+      "trades_succeeded": 0,
+      "new_symbols": 8,
+      "alive_agents": 2
+    },
+    {
+      "round_number": 54,
+      "parallel_inference_ms": 0.6103999985498376,
+      "sequential_estimate_ms": 1.8311999956495129,
+      "trades_attempted": 0,
+      "trades_succeeded": 0,
+      "new_symbols": 8,
+      "alive_agents": 2
+    },
+    {
+      "round_number": 55,
+      "parallel_inference_ms": 0.21389999892562628,
+      "sequential_estimate_ms": 0.6416999967768788,
+      "trades_attempted": 0,
+      "trades_succeeded": 0,
+      "new_symbols": 8,
+      "alive_agents": 2
+    },
+    {
+      "round_number": 56,
+      "parallel_inference_ms": 0.20229999790899456,
+      "sequential_estimate_ms": 0.6068999937269837,
+      "trades_attempted": 0,
+      "trades_succeeded": 0,
+      "new_symbols": 8,
+      "alive_agents": 2
+    },
+    {
+      "round_number": 57,
+      "parallel_inference_ms": 0.139899999339832,
+      "sequential_estimate_ms": 0.419699998019496,
+      "trades_attempted": 0,
+      "trades_succeeded": 0,
+      "new_symbols": 8,
+      "alive_agents": 2
+    },
+    {
+      "round_number": 58,
+      "parallel_inference_ms": 0.12449999849195592,
+      "sequential_estimate_ms": 0.37349999547586776,
+      "trades_attempted": 0,
+      "trades_succeeded": 0,
+      "new_symbols": 8,
+      "alive_agents": 2
+    },
+    {
+      "round_number": 59,
+      "parallel_inference_ms": 0.1329000006080605,
+      "sequential_estimate_ms": 0.3987000018241815,
+      "trades_attempted": 0,
+      "trades_succeeded": 0,
+      "new_symbols": 8,
+      "alive_agents": 2
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+# Secrets — keys live in the environment, never in the repo
+.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Run artefacts are regenerable; only the curated sample_* files are tracked
+outputs/*
+!outputs/sample_run.json
+!outputs/sample_vocabulary.json
+!outputs/sample_benchmark.json
+!outputs/sample_fireworks_run.json
+!outputs/sample_fireworks_vocabulary.json
+
+# Local tooling
+.claude/
+*.bat

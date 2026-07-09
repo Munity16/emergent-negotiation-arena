@@ -1,0 +1,34 @@
+# Emergent Negotiation Arena
+# Python 3.11+
+
+# HTTP client for Fireworks API calls
+httpx>=0.27.0
+
+# Gradio UI
+# NOTE: pinned below 5.0 — ui/app.py is built and tested against the gradio 4.x
+# API surface (Blocks js= signature, theming, event wiring). Gradio 5 changed
+# several of these, so an unbounded ">=4.37.0" would let pip install a version
+# that breaks on launch.
+gradio>=4.37.0,<5.0.0
+# NOTE: gradio 4.x imports HfFolder, which huggingface_hub 1.0 removed. Gradio 4.x
+# declares no upper bound, so without this pin a fresh install breaks at import.
+huggingface_hub<1.0
+# NOTE: gradio 4.x still uses starlette's old TemplateResponse(name, context)
+# signature, removed in newer starlette — unpinned, every page request 500s with
+# "TypeError: unhashable type: 'dict'". fastapi pins its own starlette range.
+fastapi>=0.112,<0.116
+starlette<0.42
+# audioop was removed from the stdlib in Python 3.13 (PEP 594) but gradio 4.x needs
+# it via pydub; harmless no-op on Python <=3.12.
+audioop-lts; python_version >= "3.13"
+
+# NOTE: dataclasses-json was removed — the codebase only uses Python's stdlib
+# `dataclasses` module (dataclass/field/asdict), never the third-party
+# dataclasses-json package. It was an unused dependency.
+
+# Visualisation (optional, used in benchmark chart)
+matplotlib>=3.9.0
+
+# Dev / testing
+pytest>=8.2.0
+pytest-asyncio>=0.23.0
