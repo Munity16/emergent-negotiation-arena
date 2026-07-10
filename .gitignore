@@ -19,3 +19,7 @@ outputs/*
 # Local tooling
 .claude/
 *.bat
+
+# Local virtualenvs
+.venv*/
+venv/
