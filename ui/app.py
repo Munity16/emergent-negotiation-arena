@@ -126,6 +126,18 @@ FONT_HEAD = (
     '<link rel="preconnect" href="https://fonts.googleapis.com">'
     '<link rel="stylesheet" '
     'href="https://fonts.googleapis.com/css2?family=VT323&display=swap">'
+    # Vocabulary-card container query: gradio 4.x's css= processor drops
+    # @container at-rules, so this one rule ships via head= instead. It flips
+    # the table into scroll-inside-the-card mode whenever the CARD (not the
+    # viewport) is too narrow for six readable columns — e.g. tablets where
+    # Vocabulary and Emergent words still sit side by side.
+    '<style>'
+    '@container (max-width: 520px) {'
+    '  .ena-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch;'
+    '    scrollbar-gutter: stable; }'
+    '  .ena-table { min-width: 720px; }'
+    '}'
+    '</style>'
 )
 
 CUSTOM_CSS = """
@@ -341,44 +353,86 @@ body, .gradio-container, .dark .gradio-container {
 }
 
 /* ── Vocabulary table ── */
+/* One layout system: table-layout fixed + explicit <colgroup> percentage
+   widths (see get_vocabulary_table). On desktop all six columns fit inside
+   the card with no scrollbar; below 760px the wrapper alone scrolls
+   horizontally inside the card, never the page. */
+.ena-table-wrap {
+  width: 100%; max-width: 100%; min-width: 0;
+  overflow-x: hidden; box-sizing: border-box;
+}
 .ena-table {
-  width: 100%; border-collapse: collapse; table-layout: fixed;
-  font-size: 12px; font-family: var(--ena-mono);
+  width: 100%; max-width: 100%; table-layout: fixed; border-collapse: collapse;
+  box-sizing: border-box; font-size: 12px; font-family: var(--ena-mono);
+}
+.ena-col-symbol    { width: 14%; }
+.ena-col-stability { width: 25%; }
+.ena-col-uses      { width: 8%; }
+.ena-col-success   { width: 11%; }
+.ena-col-adopters  { width: 14%; }
+.ena-col-meaning   { width: 28%; }
+.ena-table th, .ena-table td {
+  padding: 9px 10px; box-sizing: border-box;
+  text-align: center; vertical-align: middle;
 }
 .ena-table th {
-  text-align: left; font-size: 10px; font-weight: 600; color: var(--ena-muted);
-  text-transform: uppercase; letter-spacing: .08em; white-space: nowrap;
-  padding: 6px 6px 6px 0; border-bottom: 1px solid var(--ena-ring);
+  font-size: 10px; font-weight: 600; color: var(--ena-muted);
+  text-transform: uppercase; letter-spacing: .08em;
+  white-space: nowrap; line-height: 1.4;
+  border-bottom: 1px solid var(--ena-ring);
 }
+/* The long "Meaning (dominant context)" header wraps inside its column */
+.ena-table th:last-child { white-space: normal; overflow-wrap: anywhere; }
 .ena-table td {
-  padding: 6px 6px 6px 0; border-bottom: 1px solid var(--ena-hairline);
-  color: var(--ena-ink); vertical-align: middle;
-  font-variant-numeric: tabular-nums;
+  border-bottom: 1px solid var(--ena-hairline);
+  color: var(--ena-ink); font-variant-numeric: tabular-nums;
 }
-/* Fixed column widths — Symbol · Stability · Uses · Success · Adopters;
-   the final Meaning column takes the remaining space. */
-.ena-table th:nth-child(1), .ena-table td:nth-child(1) { width: 82px; }
-.ena-table th:nth-child(2), .ena-table td:nth-child(2) { width: 175px; }
-.ena-table th:nth-child(3), .ena-table td:nth-child(3) { width: 48px; }
-.ena-table th:nth-child(4), .ena-table td:nth-child(4) { width: 76px; }
-.ena-table th:nth-child(5), .ena-table td:nth-child(5) { width: 92px; }
-.ena-table th:nth-child(6), .ena-table td:nth-child(6) { width: auto; }
-.ena-table td:nth-child(3), .ena-table td:nth-child(4),
-.ena-table td:nth-child(5) { white-space: nowrap; }
+.ena-table td.ena-ctx {
+  text-align: left; overflow-wrap: anywhere; word-break: normal;
+}
 .ena-sym {
   font-family: var(--ena-mono); font-size: 11.5px; font-weight: 700;
   color: var(--ena-ink); white-space: nowrap;
 }
 .ena-sym::before { content: "[ "; color: var(--ena-muted); font-weight: 400; }
 .ena-sym::after  { content: " ]"; color: var(--ena-muted); font-weight: 400; }
-.ena-stab { display: flex; align-items: center; gap: 6px; min-width: 0; }
-.ena-stab .ena-track { flex: 1; }
+/* Inside the fixed-layout table an unusually long symbol wraps instead of
+   overlapping the next column */
+.ena-table .ena-sym { white-space: normal; overflow-wrap: anywhere; }
+.ena-stab {
+  display: grid; grid-template-columns: minmax(70px, 1fr) 4ch;
+  align-items: center; gap: 8px;
+  width: 100%; min-width: 0;
+}
+.ena-stab .ena-track { width: 100%; }
+.ena-stab .val { text-align: right; }
+.ena-adopters {
+  display: inline-flex; flex-wrap: wrap; justify-content: center;
+  align-items: center; gap: 3px; max-width: 100%; vertical-align: middle;
+}
+.ena-adopters .ena-adopter { margin-right: 0; }
 .ena-adopter {
   width: 15px; height: 15px; border-radius: 2px; display: inline-flex;
   align-items: center; justify-content: center;
   color: #0a0a0a; font-size: 9px; font-weight: 700; margin-right: 3px;
 }
 .ena-ctx { color: var(--ena-ink2); }
+/* When six readable columns cannot fit, scroll horizontally inside the card
+   only — min-width 720px keeps every column readable; the page itself never
+   scrolls sideways. The container query catches a narrow Vocabulary CARD
+   (Gradio keeps it side-by-side with Emergent words down to ~660px
+   viewports); the viewport query is the fallback for small phones and
+   browsers without container-query support. */
+.ena-card:has(.ena-table-wrap) { container-type: inline-size; }
+/* NOTE: the matching "@container (max-width: 520px)" rule lives in FONT_HEAD —
+   gradio's css= processor strips @container at-rules. */
+@media (max-width: 760px) {
+  .ena-table-wrap {
+    overflow-x: auto; -webkit-overflow-scrolling: touch;
+    scrollbar-gutter: stable;
+  }
+  .ena-table { min-width: 720px; }
+}
 
 /* ── Feeds ── */
 .ena-feed { display: flex; flex-direction: column; gap: 4px; font-family: var(--ena-mono); }
@@ -447,12 +501,7 @@ body, .gradio-container, .dark .gradio-container {
 }
 
 /* ── Mobile responsiveness ── */
-/* Horizontal-scroll shell for the vocabulary table; on desktop the table fits
-   at 100% width so this is a no-op. */
-.ena-table-wrap {
-  width: 100%; max-width: 100%;
-  overflow-x: auto; -webkit-overflow-scrolling: touch;
-}
+/* (Vocabulary table responsive rules live with the table styles above.) */
 @media (max-width: 640px) {
   /* World map: ten flexible equal columns, square cells, card-width bound */
   .ena-grid {
@@ -461,8 +510,6 @@ body, .gradio-container, .dark .gradio-container {
     width: 100%; max-width: 100%;
   }
   .ena-cell { aspect-ratio: 1; }
-  /* Vocabulary table: keep columns readable, swipe inside .ena-table-wrap */
-  .ena-table { min-width: 560px; }
   /* Panels: slightly tighter padding, headings/subtitles/axis wrap cleanly */
   .ena-card { padding: 10px 12px; }
   .ena-card-head { flex-wrap: wrap; gap: 4px 10px; }
@@ -736,13 +783,18 @@ def get_vocabulary_table() -> str:
             f'<tr><td><span class="ena-sym">{_esc(e["symbol"])}</span></td>'
             f'<td><div class="ena-stab"><div class="ena-track"><div class="ena-fill" '
             f'style="width:{int(stab * 100)}%;background:#e5e5e5"></div></div>'
-            f'{stab:.2f}</div></td>'
+            f'<span class="val">{stab:.2f}</span></div></td>'
             f'<td>{e["usage_count"]}</td>'
             f'<td>{e["success_rate"] * 100:.0f}%</td>'
-            f'<td>{adopters}</td>'
+            f'<td><span class="ena-adopters">{adopters}</span></td>'
             f'<td class="ena-ctx">{_esc(meaning)}</td></tr>'
         )
-    table = ('<div class="ena-table-wrap"><table class="ena-table"><thead><tr>'
+    table = ('<div class="ena-table-wrap"><table class="ena-table">'
+             '<colgroup>'
+             '<col class="ena-col-symbol"><col class="ena-col-stability">'
+             '<col class="ena-col-uses"><col class="ena-col-success">'
+             '<col class="ena-col-adopters"><col class="ena-col-meaning">'
+             '</colgroup><thead><tr>'
              '<th>Symbol</th><th>Stability</th><th>Uses</th><th>Success</th>'
              '<th>Adopters</th><th>Meaning (dominant context)</th>'
              '</tr></thead><tbody>' + "".join(rows) + "</tbody></table></div>")
@@ -911,6 +963,24 @@ POLL_JS = """
 () => {
   document.body.classList.add('dark');
   document.body.classList.remove('light');
+  // Vocabulary table: every poll re-renders the HTML block, recreating
+  // .ena-table-wrap at scrollLeft 0 (so first load always starts at the
+  // Symbol column). But that same reset would snap the table back while a
+  // user is swiping through it on mobile — remember the last user scroll
+  // position and restore it after each re-render.
+  let vocabScroll = 0;
+  document.addEventListener('scroll', (e) => {
+    const t = e.target;
+    if (t && t.classList && t.classList.contains('ena-table-wrap')) {
+      vocabScroll = t.scrollLeft;
+    }
+  }, true);
+  new MutationObserver(() => {
+    if (vocabScroll === 0) return;
+    document.querySelectorAll('.ena-table-wrap').forEach((w) => {
+      if (Math.abs(w.scrollLeft - vocabScroll) > 1) w.scrollLeft = vocabScroll;
+    });
+  }).observe(document.body, { childList: true, subtree: true });
   setInterval(() => {
     const btn = document.getElementById('ena-refresh-btn');
     if (btn) btn.click();
