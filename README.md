@@ -9,13 +9,6 @@
 <p align="center"><b>Three LLM agents, trapped in a scarce world with no shared language, invent one — live, measurably, on screen.</b></p>
 
 <p align="center">
-  <a href="SUBMISSION.md">Hackathon Submission</a> ·
-  <a href="https://github.com/Munity16/emergent-negotiation-arena">GitHub</a> ·
-  Live Demo <i>(hosted Space coming shortly)</i> ·
-  Demo Video <i>(coming shortly)</i>
-</p>
-
-<p align="center">
   <img src="assets/badges/tests.svg" height="26" alt="tests 84/84">
   <img src="assets/badges/python.svg" height="26" alt="python 3.11+">
   <img src="assets/badges/gradio.svg" height="26" alt="gradio 4.x">
