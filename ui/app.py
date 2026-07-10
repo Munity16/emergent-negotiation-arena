@@ -341,24 +341,37 @@ body, .gradio-container, .dark .gradio-container {
 }
 
 /* ── Vocabulary table ── */
-.ena-table { width: 100%; border-collapse: collapse; font-size: 12px; font-family: var(--ena-mono); }
+.ena-table {
+  width: 100%; border-collapse: collapse; table-layout: fixed;
+  font-size: 12px; font-family: var(--ena-mono);
+}
 .ena-table th {
   text-align: left; font-size: 10px; font-weight: 600; color: var(--ena-muted);
-  text-transform: uppercase; letter-spacing: .08em;
-  padding: 6px 10px 6px 0; border-bottom: 1px solid var(--ena-ring);
+  text-transform: uppercase; letter-spacing: .08em; white-space: nowrap;
+  padding: 6px 6px 6px 0; border-bottom: 1px solid var(--ena-ring);
 }
 .ena-table td {
-  padding: 7px 10px 7px 0; border-bottom: 1px solid var(--ena-hairline);
+  padding: 6px 6px 6px 0; border-bottom: 1px solid var(--ena-hairline);
   color: var(--ena-ink); vertical-align: middle;
   font-variant-numeric: tabular-nums;
 }
+/* Fixed column widths — Symbol · Stability · Uses · Success · Adopters;
+   the final Meaning column takes the remaining space. */
+.ena-table th:nth-child(1), .ena-table td:nth-child(1) { width: 82px; }
+.ena-table th:nth-child(2), .ena-table td:nth-child(2) { width: 175px; }
+.ena-table th:nth-child(3), .ena-table td:nth-child(3) { width: 48px; }
+.ena-table th:nth-child(4), .ena-table td:nth-child(4) { width: 76px; }
+.ena-table th:nth-child(5), .ena-table td:nth-child(5) { width: 92px; }
+.ena-table th:nth-child(6), .ena-table td:nth-child(6) { width: auto; }
+.ena-table td:nth-child(3), .ena-table td:nth-child(4),
+.ena-table td:nth-child(5) { white-space: nowrap; }
 .ena-sym {
   font-family: var(--ena-mono); font-size: 11.5px; font-weight: 700;
   color: var(--ena-ink); white-space: nowrap;
 }
 .ena-sym::before { content: "[ "; color: var(--ena-muted); font-weight: 400; }
 .ena-sym::after  { content: " ]"; color: var(--ena-muted); font-weight: 400; }
-.ena-stab { display: flex; align-items: center; gap: 8px; min-width: 110px; }
+.ena-stab { display: flex; align-items: center; gap: 6px; min-width: 0; }
 .ena-stab .ena-track { flex: 1; }
 .ena-adopter {
   width: 15px; height: 15px; border-radius: 2px; display: inline-flex;
