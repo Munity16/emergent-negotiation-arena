@@ -1,0 +1,14 @@
+# Render Blueprint — deploys the Gradio app as a persistent Web Service.
+# FIREWORKS_API_KEY is intentionally NOT listed here; add it manually in the
+# Render dashboard (Environment tab) after replay/heuristic verification.
+services:
+  - type: web
+    name: emergent-negotiation-arena
+    runtime: python
+    plan: free
+    branch: main
+    buildCommand: pip install -r requirements.txt
+    startCommand: python ui/app.py
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.8
