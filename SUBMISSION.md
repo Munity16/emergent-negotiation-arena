@@ -26,9 +26,10 @@ A vocabulary tracker measures every symbol's usage, success rate, stability,
 and adopters. When two or more agents commit to the same symbol for the same
 trade context (by proposing with it or accepting under it — merely receiving
 it doesn't count), the system fires a convergence event: a word has emerged.
-In a logged live run on the Fireworks API (gpt-oss-120b, 30 rounds), agents
-invented `Z1` for water→metal trades and `W2F` for water→food, with both
-sides adopting them mid-run — 4 of 4 proposed trades executed.
+In a logged live run on the Fireworks API (gpt-oss-120b, 30 rounds, seed 7),
+agents invented `Z1` for water→metal trades — both parties adopted it, with
+the convergence event at round 8 — and one agent coined `W2F` for
+water→food. 4 of 4 proposed trades executed, with 0 fallback decisions.
 
 Everything is engineered to be auditable. The world — not the model — is the
 referee: an "accepted" trade the buyer can't pay for is recorded as failed
@@ -41,6 +42,15 @@ withholds trade details so symbols must genuinely carry meaning. A
 terminal-styled Gradio dashboard shows the map, agents, per-round trade
 activity, the growing vocabulary, convergence events, and measured
 parallel-inference latency, live.
+
+The dashboard is deployed as a Render Web Service (free instance,
+Python 3.12.8) with auto-deployment from the repository's `main` branch.
+Verified on the deployed service: page load, the Replay backend, the
+Heuristic backend with its background simulation thread, and access from a
+separate mobile device. The Fireworks backend is configured for secure
+runtime use through Render's environment settings (the key is never
+committed); its final live deployment test is pending. Free instances sleep
+after inactivity, so the first load may incur a cold-start delay.
 
 ## Technology tags
 
