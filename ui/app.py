@@ -432,6 +432,36 @@ body, .gradio-container, .dark .gradio-container {
   font-family: var(--ena-display) !important; font-size: 20px !important;
   color: var(--ena-ink) !important; text-transform: uppercase;
 }
+
+/* ── Mobile responsiveness ── */
+/* Horizontal-scroll shell for the vocabulary table; on desktop the table fits
+   at 100% width so this is a no-op. */
+.ena-table-wrap {
+  width: 100%; max-width: 100%;
+  overflow-x: auto; -webkit-overflow-scrolling: touch;
+}
+@media (max-width: 640px) {
+  /* World map: ten flexible equal columns, square cells, card-width bound */
+  .ena-grid {
+    grid-template-columns: repeat(10, minmax(0, 1fr));
+    grid-auto-rows: auto;
+    width: 100%; max-width: 100%;
+  }
+  .ena-cell { aspect-ratio: 1; }
+  /* Vocabulary table: keep columns readable, swipe inside .ena-table-wrap */
+  .ena-table { min-width: 560px; }
+  /* Panels: slightly tighter padding, headings/subtitles/axis wrap cleanly */
+  .ena-card { padding: 10px 12px; }
+  .ena-card-head { flex-wrap: wrap; gap: 4px 10px; }
+  .ena-sub { white-space: normal; }
+  .ena-axis { flex-wrap: wrap; gap: 2px 10px; }
+  /* Gradio layout blocks must not force horizontal page overflow */
+  .gradio-container .column, .gradio-container .row,
+  .gradio-container .html-container, .gradio-container .prose {
+    min-width: 0 !important; max-width: 100% !important;
+  }
+  .gradio-container { overflow-x: hidden; }
+}
 """
 
 DECO_ROW = ('<div class="ena-deco"><span>[</span>'
@@ -699,10 +729,10 @@ def get_vocabulary_table() -> str:
             f'<td>{adopters}</td>'
             f'<td class="ena-ctx">{_esc(meaning)}</td></tr>'
         )
-    table = ('<table class="ena-table"><thead><tr>'
+    table = ('<div class="ena-table-wrap"><table class="ena-table"><thead><tr>'
              '<th>Symbol</th><th>Stability</th><th>Uses</th><th>Success</th>'
              '<th>Adopters</th><th>Meaning (dominant context)</th>'
-             '</tr></thead><tbody>' + "".join(rows) + "</tbody></table>")
+             '</tr></thead><tbody>' + "".join(rows) + "</tbody></table></div>")
     return _card("Vocabulary", table,
                  sub=f"{len(snapshot['vocab_entries'])} symbols invented · "
                      "top 12 by stability")
