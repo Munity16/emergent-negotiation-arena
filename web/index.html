@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Emergent Negotiation Arena — Live Replay</title>
+<style>
+  :root {
+    --bg: #0a0a0a; --panel: #0d0d0d; --ink: #f5f5f5; --ink2: #b3b3b3;
+    --muted: #6f6f6f; --hair: #222; --ring: #2b2b2b; --red: #ff5555;
+    --food: #b91c1c; --water: #ea580c; --metal: #f5a623; --energy: #ffee58;
+    --a0: #34d399; --a1: #1d9bf0; --a2: #f472b6; --good: #34d399;
+    --mono: Consolas, 'Courier New', ui-monospace, monospace;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font-family: var(--mono); font-size: 13px;
+    background-image:
+      repeating-linear-gradient(0deg, #151515 0 1px, transparent 1px 34px),
+      repeating-linear-gradient(90deg, #151515 0 1px, transparent 1px 34px);
+  }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 22px 18px 40px; }
+  header { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; margin-bottom: 6px; }
+  h1 { font-size: 26px; letter-spacing: 2px; margin: 0; font-weight: 700; }
+  .dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%;
+         background: var(--red); animation: blink 1.6s steps(2) infinite; }
+  @keyframes blink { 50% { opacity: 0.15; } }
+  .sub { color: var(--ink2); margin: 0 0 16px; }
+  .deco { color: #4a4a4a; font-size: 11px; letter-spacing: 3px; margin-bottom: 14px; }
+
+  .controls { display: flex; gap: 8px; flex-wrap: wrap; align-items: center;
+              background: var(--panel); border: 1px solid var(--ring);
+              padding: 10px 12px; margin-bottom: 14px; }
+  button, select {
+    background: #111; color: var(--ink); border: 1px solid var(--ring);
+    font-family: var(--mono); font-size: 12px; padding: 6px 12px; cursor: pointer;
+  }
+  button.primary { background: var(--ink); color: #0a0a0a; font-weight: 700; }
+  input[type=range] { flex: 1; min-width: 160px; accent-color: #f5f5f5; }
+  .roundlbl { color: var(--ink2); min-width: 110px; text-align: right;
+              font-variant-numeric: tabular-nums; }
+
+  .grid2 { display: grid; grid-template-columns: minmax(330px, 380px) 1fr;
+           gap: 14px; align-items: start; }
+  @media (max-width: 860px) { .grid2 { grid-template-columns: 1fr; } }
+  .card { background: var(--panel); border: 1px solid var(--ring); padding: 12px 14px; }
+  .card h2 { font-size: 15px; letter-spacing: 1px; margin: 0 0 10px;
+             text-transform: uppercase; font-weight: 700; }
+  .card h2 .k { color: var(--muted); font-size: 11px; font-weight: 400;
+                text-transform: none; letter-spacing: 0; }
+
+  #map { display: grid; grid-template-columns: repeat(10, 29px);
+         grid-auto-rows: 29px; gap: 1px; background: var(--hair);
+         border: 1px solid var(--hair); width: max-content; }
+  .cell { background: var(--bg); position: relative;
+          display: flex; align-items: center; justify-content: center; }
+  .tile { border-radius: 50%; display: flex; align-items: center;
+          justify-content: center; font-size: 8px; font-weight: 700; }
+  .badge { width: 22px; height: 22px; border-radius: 2px; color: #0a0a0a;
+           font-weight: 700; font-size: 12px; display: flex; align-items: center;
+           justify-content: center; box-shadow: 0 0 0 2px var(--bg); z-index: 2; }
+  .badge.small { width: 12px; height: 12px; font-size: 8px; }
+  .legend { display: flex; flex-wrap: wrap; gap: 4px 12px; margin-top: 10px;
+            color: var(--ink2); font-size: 11px; }
+  .legend span::before { content: "[ "; color: var(--muted); }
+  .legend span::after  { content: " ]"; color: var(--muted); }
+  .sw { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 4px; }
+  .swq { display: inline-block; width: 9px; height: 9px; border-radius: 2px; margin-right: 4px; }
+
+  .agents { display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); }
+  .agent { border: 1px solid var(--ring); background: var(--panel); padding: 10px 12px; }
+  .agent.dead { opacity: 0.5; }
+  .agent .head { display: flex; gap: 8px; align-items: center; margin-bottom: 6px; }
+  .agent .score { font-size: 22px; font-weight: 700; }
+  .agent .st { margin-left: auto; font-size: 10px; }
+  .agent .st.alive { color: var(--good); } .agent .st.deadlbl { color: var(--red); }
+  .bar { display: grid; grid-template-columns: 50px 1fr 26px; gap: 7px;
+         align-items: center; font-size: 11px; margin: 3px 0; color: var(--ink2); }
+  .track { height: 7px; background: #161616; border: 1px solid var(--hair); overflow: hidden; }
+  .fill { height: 100%;
+          -webkit-mask: repeating-linear-gradient(90deg, #000 0 4px, transparent 4px 6px);
+                  mask: repeating-linear-gradient(90deg, #000 0 4px, transparent 4px 6px); }
+  .bar .v { text-align: right; color: var(--ink); font-variant-numeric: tabular-nums; }
+
+  .thoughts { margin-top: 12px; }
+  .thought { border-left: 2px solid var(--ring); padding: 4px 8px; margin: 4px 0;
+             color: var(--ink2); font-size: 12px; }
+  .thought b { color: var(--ink); }
+  .sym { font-weight: 700; color: var(--ink); }
+  .sym::before { content: "[ "; color: var(--muted); font-weight: 400; }
+  .sym::after  { content: " ]"; color: var(--muted); font-weight: 400; }
+
+  .stats { display: flex; gap: 8px; flex-wrap: wrap; margin: 14px 0; }
+  .stat { flex: 1 1 120px; background: var(--panel); border: 1px solid var(--ring);
+          padding: 8px 12px; }
+  .stat .v { font-size: 24px; font-weight: 700; }
+  .stat .l { font-size: 10px; color: var(--muted); text-transform: uppercase;
+             letter-spacing: 1px; }
+  .stat.word .v { color: var(--ink); } .stat.word { border-color: var(--red); }
+
+  #feed { display: flex; flex-direction: column-reverse; gap: 4px;
+          max-height: 240px; overflow-y: auto; }
+  .trade { border-left: 2px solid var(--muted); padding: 4px 8px;
+           font-size: 12px; color: var(--ink2); }
+  .trade.accepted { border-left-color: var(--good); }
+  .trade.accepted .o { color: var(--good); }
+  .trade.rejected { border-left-color: var(--red); }
+  .trade.rejected .o { color: var(--red); }
+  .trade .o { font-weight: 700; text-transform: uppercase; font-size: 10.5px; }
+  .trade .r { color: var(--muted); margin-right: 6px; }
+
+  #flash { position: fixed; left: 50%; top: 42%; transform: translate(-50%, -50%);
+           background: #0d0d0d; border: 1px solid var(--red); padding: 18px 30px;
+           font-size: 18px; display: none; z-index: 10; text-align: center; }
+  #flash .big { font-size: 30px; font-weight: 700; letter-spacing: 2px; }
+  footer { margin-top: 26px; color: var(--muted); font-size: 11px; }
+  footer a { color: var(--ink2); }
+  .loading { color: var(--muted); padding: 40px 0; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="deco">[ &#9632; &#9632; &#9632; &nbsp; &#9632; &#9632; &nbsp; &#9632; &#9632; &#9632; &nbsp; &#9632; ]</div>
+  <header>
+    <h1>EMERGENT NEGOTIATION ARENA</h1><span class="dot"></span>
+  </header>
+  <p class="sub">Three AI agents. No shared language. They must invent one to survive.
+     This page replays <b>real recorded runs</b> — every decision below actually happened.</p>
+
+  <div class="controls">
+    <select id="runsel">
+      <option value="fireworks">LLM run — Fireworks gpt-oss-120b (symbols Z1, W2F emerge)</option>
+      <option value="heuristic">Rule-based run — 60 rounds, 4 convergence events</option>
+    </select>
+    <button id="play" class="primary">&#9654; play</button>
+    <select id="speed">
+      <option value="900">0.5&#215;</option>
+      <option value="450" selected>1&#215;</option>
+      <option value="220">2&#215;</option>
+    </select>
+    <input type="range" id="scrub" min="0" max="0" value="0">
+    <span class="roundlbl" id="roundlbl">round —</span>
+  </div>
+
+  <div id="app" class="loading">loading recorded run…</div>
+
+  <div id="flash"><div class="big"></div><div class="why"></div></div>
+
+  <footer>
+    [ static replay viewer &#183; no backend &#183; data: recorded simulation logs in this repository &#183;
+    <a href="https://github.com/Munity16/emergent-negotiation-arena">source + full interactive app</a> ]
+  </footer>
+</div>
+
+<script>
+const RES = ["food", "water", "metal", "energy"];
+const RESVAR = { food: "--food", water: "--water", metal: "--metal", energy: "--energy" };
+const INKON = { food: "#fff", water: "#fff", metal: "#0a0a0a", energy: "#0a0a0a" };
+const AVAR = { agent_0: "--a0", agent_1: "--a1", agent_2: "--a2" };
+const FILES = {
+  fireworks: "../outputs/sample_fireworks_run.json",
+  heuristic: "../outputs/sample_run.json",
+};
+
+let rounds = [], cur = 0, timer = null, seenConv = 0;
+
+const $ = (s) => document.querySelector(s);
+const esc = (s) => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const v = (name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+
+function zoneOf(r, c) { return r < 5 ? (c < 5 ? "food" : "water") : (c < 5 ? "metal" : "energy"); }
+
+function shell() {
+  $("#app").className = "";
+  $("#app").innerHTML = `
+    <div class="stats">
+      <div class="stat"><div class="v" id="s-trades">0</div><div class="l">trades executed</div></div>
+      <div class="stat"><div class="v" id="s-sym">0</div><div class="l">symbols invented</div></div>
+      <div class="stat word"><div class="v" id="s-conv">0</div><div class="l">shared "words"</div></div>
+      <div class="stat"><div class="v" id="s-alive">3</div><div class="l">agents alive</div></div>
+    </div>
+    <div class="grid2">
+      <div class="card"><h2>World map <span class="k" id="mapsub"></span></h2>
+        <div id="map"></div>
+        <div class="legend">
+          <span><i class="sw" style="background:var(--food)"></i>food</span>
+          <span><i class="sw" style="background:var(--water)"></i>water</span>
+          <span><i class="sw" style="background:var(--metal)"></i>metal</span>
+          <span><i class="sw" style="background:var(--energy)"></i>energy</span>
+          <span><i class="swq" style="background:var(--a0)"></i>agent_0</span>
+          <span><i class="swq" style="background:var(--a1)"></i>agent_1</span>
+          <span><i class="swq" style="background:var(--a2)"></i>agent_2</span>
+        </div>
+      </div>
+      <div>
+        <div class="agents" id="agents"></div>
+        <div class="card thoughts"><h2>Decisions this round <span class="k">verbatim from the log</span></h2>
+          <div id="thoughts"></div>
+        </div>
+      </div>
+    </div>
+    <div class="card" style="margin-top:14px"><h2>Trade log <span class="k">accumulating · newest on top</span></h2>
+      <div id="feed"></div>
+    </div>`;
+}
+
+function render(i) {
+  const r = rounds[i];
+  const ws = r.world_state;
+  $("#roundlbl").textContent = `round ${r.round} / ${rounds[rounds.length - 1].round}`;
+  $("#scrub").value = i;
+  $("#mapsub").textContent = `round ${r.round} · ${ws.alive_count}/3 alive`;
+
+  // stats
+  $("#s-trades").textContent = ws.successful_trades;
+  $("#s-sym").textContent = r.symbol_summary.total_symbols;
+  $("#s-conv").textContent = r.symbol_summary.convergence_events;
+  $("#s-alive").textContent = ws.alive_count;
+
+  // map
+  const tiles = {}, agentsAt = {};
+  ws.resource_tiles.forEach(t => tiles[t.pos[0] + "," + t.pos[1]] = t);
+  Object.values(ws.agents).forEach(a => {
+    if (!a.alive) return;
+    const k = a.position[0] + "," + a.position[1];
+    (agentsAt[k] = agentsAt[k] || []).push(a);
+  });
+  let html = "";
+  for (let row = 0; row < 10; row++) for (let col = 0; col < 10; col++) {
+    const zone = zoneOf(row, col), k = row + "," + col;
+    let inner = "";
+    const here = agentsAt[k] || [];
+    if (here.length) {
+      inner = here.map(a =>
+        `<span class="badge${here.length > 1 ? " small" : ""}" style="background:var(${AVAR[a.agent_id]})">${a.agent_id.slice(-1)}</span>`).join("");
+    } else if (tiles[k] && tiles[k].amount > 0) {
+      const t = tiles[k], size = 11 + Math.min(6, t.amount);
+      inner = `<span class="tile" style="background:var(${RESVAR[t.type]});color:${INKON[t.type]};width:${size}px;height:${size}px">${t.type[0]}</span>`;
+    }
+    html += `<div class="cell" style="background:color-mix(in srgb, var(${RESVAR[zone]}) 7%, var(--bg))">${inner}</div>`;
+  }
+  $("#map").innerHTML = html;
+
+  // agent cards
+  $("#agents").innerHTML = Object.values(ws.agents).map(a => `
+    <div class="agent${a.alive ? "" : " dead"}">
+      <div class="head"><span class="badge" style="background:var(${AVAR[a.agent_id]})">${a.agent_id.slice(-1)}</span>
+        <b>${a.agent_id}</b>
+        <span class="st ${a.alive ? "alive" : "deadlbl"}">[ ${a.alive ? "&#9679; alive" : "&#10013; dead"} ]</span></div>
+      <div><span class="score">${a.score.toFixed(1)}</span>
+        <span style="color:var(--muted);font-size:10px"> SCORE</span></div>
+      ${RES.map(res => {
+        const val = a.resources[res] ?? 0;
+        return `<div class="bar"><span>${res}</span>
+          <div class="track"><div class="fill" style="width:${Math.min(100, val * 5)}%;background:var(${RESVAR[res]})"></div></div>
+          <span class="v">${val}</span></div>`;
+      }).join("")}
+    </div>`).join("");
+
+  // decisions
+  $("#thoughts").innerHTML = Object.entries(r.decisions).map(([aid, d]) => {
+    let what = d.action === "propose_trade"
+      ? `proposes <span class="sym">${esc(d.symbol || "?")}</span> — gives ${esc(fmt(d.offer))} for ${esc(fmt(d.request))} → ${esc(d.target_id || "?")}`
+      : d.action === "accept_trade" ? `ACCEPTS with <span class="sym">${esc(d.symbol || "?")}</span>`
+      : d.action === "reject_trade" ? `rejects with <span class="sym">${esc(d.symbol || "?")}</span>`
+      : `${esc(d.action)} ${esc(d.direction || "")}`;
+    const why = d.reasoning ? ` <span style="color:var(--muted)">· ${esc(d.reasoning)}</span>` : "";
+    return `<div class="thought" style="border-left-color:var(${AVAR[aid]})"><b>${aid.slice(-1)}</b> ${what}${why}</div>`;
+  }).join("") || `<div class="thought">—</div>`;
+
+  // convergence flash
+  if (r.symbol_summary.convergence_events > seenConv && timer) {
+    seenConv = r.symbol_summary.convergence_events;
+    flash(r);
+  } else if (!timer) {
+    seenConv = r.symbol_summary.convergence_events;
+  }
+}
+
+function fmt(d) {
+  if (!d || typeof d !== "object") return "?";
+  return Object.entries(d).map(([k, n]) => `${n} ${k}`).join(", ");
+}
+
+function rebuildFeed(uptoIdx) {
+  const items = [];
+  for (let i = 0; i <= uptoIdx; i++) (rounds[i].trades || []).forEach(t => items.push(t));
+  $("#feed").innerHTML = items.slice(-40).map(t => {
+    const cls = t.type === "accepted" ? "accepted" : (t.type === "rejected" ? "rejected" : "");
+    const label = { accepted: "&#10003; accepted", rejected: "&#10007; rejected", failed: "&#9888; failed" }[t.type] || esc(t.type);
+    const detail = t.type === "accepted" || t.type === "failed"
+      ? ` ${esc(t.proposer.slice(-1))}&#8594;${esc(t.target.slice(-1))} gave ${esc(fmt(t.offer))} for ${esc(fmt(t.request))}`
+      : ` ${esc(t.proposer.slice(-1))}&#8594;${esc(t.target.slice(-1))}`;
+    return `<div class="trade ${cls}"><span class="r">R${t.round}</span><span class="o">${label}</span>${detail}
+      <span class="sym">${esc(t.symbol || "?")}</span></div>`;
+  }).join("") || `<div class="trade">no trades yet — agents are still finding each other</div>`;
+}
+
+function flash(r) {
+  const el = $("#flash");
+  el.querySelector(".big").innerHTML = `[ ${esc(r.symbol_summary.most_stable_symbol || "?")} ]`;
+  el.querySelector(".why").textContent = 'a shared "word" emerged — 2+ agents committed to the same symbol';
+  el.style.display = "block";
+  setTimeout(() => { el.style.display = "none"; }, 1600);
+}
+
+function show(i) {
+  cur = Math.max(0, Math.min(rounds.length - 1, i));
+  render(cur);
+  rebuildFeed(cur);
+}
+
+function play() {
+  if (timer) { stop(); return; }
+  if (cur >= rounds.length - 1) { cur = -1; seenConv = 0; }
+  $("#play").innerHTML = "&#10074;&#10074; pause";
+  timer = setInterval(() => {
+    if (cur >= rounds.length - 1) {           // loop
+      cur = -1; seenConv = 0;
+    }
+    show(cur + 1);
+  }, parseInt($("#speed").value, 10));
+}
+
+function stop() {
+  clearInterval(timer); timer = null;
+  $("#play").innerHTML = "&#9654; play";
+}
+
+async function load(which) {
+  stop();
+  $("#app").className = "loading";
+  $("#app").textContent = "loading recorded run…";
+  try {
+    const resp = await fetch(FILES[which]);
+    const data = await resp.json();
+    rounds = data.rounds || data;             // meta+rounds or legacy list
+    shell();
+    $("#scrub").max = rounds.length - 1;
+    seenConv = 0;
+    show(0);
+    play();
+  } catch (e) {
+    $("#app").textContent = "could not load " + FILES[which] + " — " + e;
+  }
+}
+
+$("#play").addEventListener("click", play);
+$("#scrub").addEventListener("input", (e) => { stop(); show(parseInt(e.target.value, 10)); });
+$("#runsel").addEventListener("change", (e) => load(e.target.value));
+$("#speed").addEventListener("change", () => { if (timer) { stop(); play(); } });
+
+load("fireworks");
+</script>
+</body>
+</html>

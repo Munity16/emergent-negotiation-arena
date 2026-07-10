@@ -146,6 +146,11 @@ python main.py --ui        # → http://localhost:7860
 In the dashboard, watch the trade log turn green and the *Emergent words*
 panel — each entry is a convention two agents committed to.
 
+No Python at all? [`web/index.html`](web/index.html) is a zero-backend
+**static replay viewer** that plays the recorded runs (including the real
+LLM run) in the browser — deployable free on Vercel or GitHub Pages
+(`vercel.json` included).
+
 ## Local Setup
 
 ```bash
