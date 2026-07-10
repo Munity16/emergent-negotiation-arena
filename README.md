@@ -1,251 +1,211 @@
----
-title: Emergent Negotiation Arena
-emoji: 🧠
-colorFrom: red
-colorTo: gray
-sdk: gradio
-sdk_version: 4.44.1
-app_file: ui/app.py
-pinned: true
-license: mit
----
+<p align="center">
+  <img src="assets/branding/logo.svg" width="170" alt="Emergent Negotiation Arena logo">
+</p>
 
-# 🧠 Emergent Negotiation Arena
+<p align="center">
+  <img src="assets/branding/hero-banner.svg" width="100%" alt="Emergent Negotiation Arena — three AI agents, no shared language, they must invent one to survive">
+</p>
 
-> Three agents are dropped into a resource-scarce 10×10 grid world.
-> They must trade to survive, and every trade proposal carries a **symbol the
-> agent invents itself**. The tracker watches which symbols get reused,
-> adopted by other agents, and stabilised into shared conventions —
-> and flags the moment a "word" is born.
+<p align="center"><b>Three LLM agents, trapped in a scarce world with no shared language, invent one — live, measurably, on screen.</b></p>
 
-**What this demonstrates, stated precisely:** agents developing *symbolic
-negotiation conventions* — reused, multi-agent-adopted tokens tied to specific
-trade contexts. In the default demo mode the responder also sees the concrete
-offer, so symbols are labels for deals rather than a load-bearing language. A
-stricter **hidden-semantics research mode** (`--semantics hidden`) withholds
-the offer details, so the responder must act on the symbol plus its own past
-experience — there, symbol meaning actually carries information.
+<p align="center">
+  <a href="SUBMISSION.md">Hackathon Submission</a> ·
+  <a href="https://github.com/Munity16/emergent-negotiation-arena">GitHub</a> ·
+  Live Demo <i>(hosted Space coming shortly)</i> ·
+  Demo Video <i>(coming shortly)</i>
+</p>
 
----
+<p align="center">
+  <img src="assets/badges/tests.svg" height="26" alt="tests 84/84">
+  <img src="assets/badges/python.svg" height="26" alt="python 3.11+">
+  <img src="assets/badges/gradio.svg" height="26" alt="gradio 4.x">
+  <img src="assets/badges/fireworks.svg" height="26" alt="llm fireworks ai">
+  <img src="assets/badges/license.svg" height="26" alt="license MIT">
+</p>
 
-## Quick start
+<p align="center">
+  <img src="assets/demo/arena-loop.gif" width="760" alt="Animated loop: three agents exchange invented symbols until a repeated symbol stabilises into a shared word">
+</p>
 
-Works on any machine with Python 3.11+:
+## The Experiment
 
-```bash
-pip install -r requirements.txt
+Three autonomous agents begin without a shared language. They must negotiate
+resource trades to survive — using symbols they invent themselves, never
+explained to anyone. The system tracks every symbol's usage, success rate,
+and adopters, and flags the exact round a repeated symbol stabilises into a
+shared convention: a primitive "word".
 
-# 1. LLM agents (the full experience — needs a Fireworks AI key)
-export FIREWORKS_API_KEY=your_key      # never commit this
-python main.py --backend fireworks --rounds 50
+## The Problem
 
-# 2. No key? Watch a guaranteed demo: replays a recorded 60-round run exactly
-python main.py --backend replay
+Multi-agent AI systems need to coordinate, but handing agents a pre-built
+protocol hides the interesting question: *can communication conventions
+emerge from pressure alone?* Most emergent-language work is either a toy
+gridworld with scripted signals or a paper without a running artifact.
+There is rarely something you can watch.
 
-# 3. Or run a live simulation with the deterministic rule-based backend
-python main.py --backend heuristic --rounds 60 --seed 42
+## The Idea
 
-# 4. Or launch the Gradio dashboard (pick backend in the UI)
-python main.py --ui        # → http://localhost:7860
+A survival economy where communication has to pay for itself.
+
+- **10×10 grid world**, four resources spawned in zones plus a central commons
+- Each agent starts rich in one resource, poor in the rest — nobody survives alone
+- Every trade proposal carries an **invented symbol** (any string, never explained)
+- Agents learn what symbols mean only from which trades succeed
+- Starvation is real: agents that fail to trade die
+
+## How It Works
+
+```
+every round
+  ├─ all 3 agents decide IN PARALLEL (one asyncio.gather = one API round-trip)
+  │    move · collect · propose_trade(offer, request, SYMBOL) · accept/reject
+  ├─ the world executes trades — only if both sides can actually pay
+  ├─ the vocabulary tracker records usage, success, adopters per symbol
+  └─ 2+ agents committed to the same symbol, same context → CONVERGENCE EVENT
 ```
 
-`--backend auto` (the default) probes what's available and picks the best:
-**Fireworks → replay → heuristic**, so the same command works with or
-without an API key.
+Adoption means *commitment* — proposing with a symbol or accepting a trade
+under it. Merely receiving a proposal never counts. Symbols unused for 10
+rounds are marked extinct.
 
-## Backends
+## Why It Is Different
+
+- **Emergence you can audit.** Every decision, trade, and adoption event is
+  logged; the replay backend re-feeds a recorded log through the *real*
+  simulation and reproduces it byte-exactly. Claims are checkable, not vibes.
+- **The world is the referee.** An agent "accepting" a trade it cannot pay
+  for is recorded as a *failed* trade everywhere. LLM output is untrusted
+  input — unknown resources, negative amounts, and proposal collisions are
+  validated and dropped visibly.
+- **Honest semantics, two ways.** Default `visible` mode is a demo (the
+  responder sees the offer; symbols are conventions over deals).
+  `--semantics hidden` is the research setting: the responder sees *only the
+  symbol* plus its own history with it, so meaning must genuinely be carried
+  by the token.
+
+## Architecture
+
+```
+main.py                  CLI entrypoint (run / replay / dashboard)
+core/grid_world.py       world: zones, tiles, trade execution, strict validation
+core/simulation.py       round loop, truthful logging, thread-safe UI snapshots
+core/symbol_tracker.py   vocabulary registry: adoption, convergence, extinction
+core/replay.py           ScriptedAgentPool — byte-exact replay of recorded runs
+agents/llm_agent.py      Fireworks client, prompts, parsing, heuristic policy,
+                         backend resolver (preflight + fallback)
+ui/app.py                terminal-styled Gradio dashboard
+deploy/huggingface/      Hugging Face Space configuration
+tests/                   84 automated tests
+```
+
+The simulation runs in a background thread; the dashboard reads only
+immutable per-round snapshots, swapped atomically.
+
+## Live AI with Fireworks
+
+The `fireworks` backend runs three LLM agents (default
+`accounts/fireworks/models/gpt-oss-120b`) through the Fireworks AI API. All
+three decisions are issued concurrently, so a round costs one API round-trip
+instead of three. Requests retry with exponential backoff on 429/5xx; a
+missing key fails fast at startup instead of dying mid-run.
+
+## Replay and Heuristic Modes
+
+The demo can never dead-end:
 
 | Backend | Needs | What it is |
 |---|---|---|
-| `fireworks` | `FIREWORKS_API_KEY` | 3 LLM agents (gpt-oss-120b) via the Fireworks AI API, decided in parallel |
-| `heuristic` | nothing | Deterministic rule-based agents; exercises the entire trade/symbol pipeline |
-| `replay` | nothing | Re-feeds a recorded run's decisions through the real simulation — byte-exact reproduction |
-| `auto` | nothing | Preflights the above in order and picks the first healthy one |
+| `fireworks` | `FIREWORKS_API_KEY` | live LLM agents, parallel decisions |
+| `heuristic` | nothing | deterministic rule-based agents — full pipeline, no key |
+| `replay` | nothing | byte-exact re-run of a recorded log through the real simulation |
+| `auto` | nothing | preflights the above in order, picks the first healthy one |
 
-Every backend is preflighted before the simulation starts: an explicitly
-requested backend that isn't available fails fast with a clear error instead
-of dying mid-run; `auto` falls through to the next option and tells you why.
+## Results
 
----
+From a real, logged Fireworks run (`gpt-oss-120b`, 30 rounds, seed 7 —
+included at [`outputs/sample_fireworks_run.json`](outputs/sample_fireworks_run.json)):
 
-## How it works
+- Agents invented **`Z1`** for water→metal trades — both parties adopted it
+  at round 8 (convergence event)
+- One agent coined **`W2F`** for water→food
+- 4 of 4 proposed trades executed; 0 fallback decisions across the run
 
-- **World:** 10×10 grid, four resources (food, water, metal, energy) spawned
-  in quadrant zones plus a small central commons. Agents consume resources
-  every few rounds and die if starved.
-- **Asymmetry forces trade:** each agent starts rich in one specialty and
-  poor elsewhere, and resource tiles are zoned — nobody can survive
-  comfortably alone.
-- **Rounds:** every round all agents decide **in parallel**
-  (`asyncio.gather`) — move, collect, propose a trade (with an invented
-  symbol), or respond to one. The world executes trades only if both sides
-  can actually pay; the *executed* outcome, not the agent's intent, is what
-  reaches the vocabulary tracker and both agents' memories.
-- **Vocabulary tracking:** a symbol's *adopters* are agents that committed to
-  it — proposed with it, or accepted a trade under it. Merely receiving a
-  proposal does not count. When 2+ agents commit to the same symbol for the
-  same resource context, that's a **convergence event**. Symbols unused for
-  10 rounds are marked extinct.
+From the bundled 60-round heuristic run (seed 42): 9 executed trades,
+8 symbols, 4 convergence events — reproduced byte-exactly by `--backend replay`.
 
-### Semantics modes
+Provenance is always labelled: non-LLM timings in the dashboard are marked
+"NOT live measurements", and the heuristic's template-minted symbols are
+never presented as LLM-emergent naming.
 
-| Mode | Responder sees | Honest claim |
-|---|---|---|
-| `visible` (default) | symbol **and** full offer/request | symbolic conventions form over deals; great for demos |
-| `hidden` | symbol + offer-size hint + own past experience with that symbol | symbols must carry meaning; this is the research setting |
-
----
-
-## Sample results (real run, included in the repo)
-
-`outputs/sample_run.json` / `sample_vocabulary.json` / `sample_benchmark.json`
-come from an actual run: **heuristic backend, seed 42, 60 rounds** — they are
-regenerable with the quick-start command above, and `--backend replay`
-reproduces them exactly.
-
-- 19 trades proposed, 9 executed; 8 symbols invented, 4 convergence events,
-  8 extinctions
-- Final scores: agent_0 = 99.0 (alive), agent_1 = 117.0 (alive),
-  agent_2 = 29.0 (starved — death is real in this economy)
-
-```
-Symbol   Uses  Success%  Stability  Adopters                    Context
-EW2         9     44.4%      0.781  agent_0, agent_1, agent_2   energy→water
-NAK        10      0.0%      0.667  agent_0, agent_1, agent_2   (rejection marker)
-WE2         4     75.0%      0.606  agent_0, agent_2            water→energy
-WE1         1    100.0%      0.589  agent_0, agent_1            water→energy
-FE2         1    100.0%      0.589  agent_0, agent_2            food→energy
-```
-
-Convergence events: `WE1` (round 10), `EW2` (round 12), `FE2` (round 14),
-`WE2` (round 15).
-
-**Provenance caveats, so nobody is misled:**
-
-- The heuristic backend mints symbols from a fixed template
-  (offer-initial + request-initial + agent number, e.g. `EW2`), so this run
-  demonstrates the *pipeline* — adoption, convergence, extinction mechanics —
-  not LLM-emergent naming. Novel symbol invention requires the `fireworks`
-  backend.
-- The timing fields in `sample_benchmark.json` (~0.2 ms/round) measure
-  rule-based decisions, **not LLM inference**. The "sequential estimate" is
-  parallel-time × 3 *by construction*; the parallelism claim is only
-  meaningful on a real LLM backend. The dashboard labels non-LLM timings
-  accordingly.
-
----
-
-## Fireworks AI (LLM agents)
+## Demo Instructions
 
 ```bash
-export FIREWORKS_API_KEY=your_key          # never commit this
-export FIREWORKS_MODEL=accounts/fireworks/models/gpt-oss-120b   # optional override
-python main.py --rounds 50 --backend fireworks
+# Guaranteed demo, no key — replays a recorded 60-round run
+python main.py --backend replay
+
+# Replay the real LLM run (watch Z1 and W2F emerge)
+python main.py --backend replay --replay-file outputs/sample_fireworks_run.json
+
+# The dashboard: pick a backend, press Start, watch the vocabulary form
+python main.py --ui        # → http://localhost:7860
 ```
 
-All three agents decide **in parallel** (`asyncio.gather`), so a round costs
-one API round-trip instead of three. Requests use the Fireworks
-OpenAI-compatible endpoint with retries and exponential backoff on 429/5xx.
-If the key is missing, `--backend fireworks` fails fast at startup; `auto`
-simply skips it.
+In the dashboard, watch the trade log turn green and the *Emergent words*
+panel — each entry is a convention two agents committed to.
 
-## Docker
+## Local Setup
+
+```bash
+git clone https://github.com/Munity16/emergent-negotiation-arena.git
+cd emergent-negotiation-arena
+pip install -r requirements.txt
+
+# optional: live LLM agents
+cp .env.example .env       # fill in FIREWORKS_API_KEY (or export it)
+python main.py --backend fireworks --rounds 50
+
+# tests
+pytest tests/ -q           # 84 passed
+```
+
+Docker:
 
 ```bash
 cd docker
-
-# LLM agents:
-FIREWORKS_API_KEY=your_key docker compose up
-
-# No key: auto-falls back to replay/heuristic (UI on :7860)
-docker compose up
+FIREWORKS_API_KEY=your_key docker compose up   # LLM agents
+docker compose up                              # no key → replay/heuristic
 ```
-
-The image bundles the sample run, so the replay demo works inside a
-fresh container with no key.
-
----
-
-## Project structure
-
-```
-emergent-negotiation-arena/
-├── core/
-│   ├── grid_world.py      # 10×10 environment, zones+commons, trade execution, validation
-│   ├── symbol_tracker.py  # Vocabulary registry, adoption/convergence/extinction
-│   ├── simulation.py      # Round orchestration, truthful trade logging, UI snapshots
-│   ├── replay.py          # ScriptedAgentPool: byte-exact replay of recorded runs
-│   └── benchmark.py       # Standalone parallel-vs-sequential benchmark script
-├── agents/
-│   └── llm_agent.py       # Fireworks LLM client, heuristic policy, backend resolver
-├── ui/
-│   ├── app.py             # Gradio dashboard: backend health panel, grid, vocab, trades
-│   ├── vocabulary_viz.py  # D3.js vocabulary lineage tree (HTML export)
-│   └── benchmark_card.py  # Shareable PNG benchmark card
-├── tests/                 # world, tracker, validation, replay, backend tests
-├── scripts/
-│   └── demo_video_run.py  # 30-round highlight reel for screen recording
-├── docker/                # Dockerfile (healthcheck), compose, .dockerignore
-├── main.py                # CLI entrypoint
-└── outputs/
-    ├── sample_run.json          # recorded 60-round run (powers --backend replay)
-    ├── sample_vocabulary.json   # its vocabulary/convergence data
-    └── sample_benchmark.json    # its timing record (heuristic — not GPU numbers)
-```
-
-## Testing
-
-```bash
-pip install -r requirements.txt
-pytest tests/ -q
-```
-
-Coverage includes: malformed/hostile trade payloads (negative amounts,
-unknown resources, wrong types), trade-outcome truthfulness (an "accepted"
-trade that can't be paid is recorded as failed everywhere), adoption and
-convergence semantics, heuristic-run determinism (two same-seed runs produce
-identical logs), replay fidelity (replay reproduces a recorded run exactly),
-and backend resolution/fail-fast behaviour with no network and no key.
-
-## Configuration reference
 
 | Env var | Default | Meaning |
 |---|---|---|
-| `AGENT_BACKEND` | `auto` | Backend if `--backend` not given |
-| `FIREWORKS_API_KEY` | — | Fireworks credential (env only — never hardcoded) |
-| `FIREWORKS_MODEL` | `accounts/fireworks/models/gpt-oss-120b` | Fireworks model id |
+| `FIREWORKS_API_KEY` | — | Fireworks credential (env only — never committed) |
+| `FIREWORKS_MODEL` | `accounts/fireworks/models/gpt-oss-120b` | model override |
+| `AGENT_BACKEND` | `auto` | backend when `--backend` not given |
 | `SEMANTICS_MODE` | `visible` | `visible` demo / `hidden` research |
-| `REPLAY_FILE` | `outputs/sample_run.json` | Recording used by the UI's replay mode |
-| `OUTPUT_DIR` | `outputs` | Where run artefacts are written |
-| `PORT` | `7860` | Gradio port |
+| `REPLAY_FILE` | `outputs/sample_run.json` | recording used by replay |
+| `PORT` | `7860` | dashboard port |
 
-CLI flags mirror these: `--rounds`, `--backend`, `--seed`, `--semantics`,
-`--replay-file`, `--replay-delay`, `--output-dir`, `--ui`.
+## Technology Stack
 
-## Outputs
+Python 3.11+ · asyncio · httpx · Gradio 4 · Fireworks AI (`gpt-oss-120b`) ·
+matplotlib · Docker · pytest
 
-Each run writes to `outputs/`:
+## AMD Hackathon Relevance
 
-- **simulation_log.json** — meta (backend, seed, semantics) + full per-round
-  log: decisions, trades (accepted / failed / rejected / dropped-invalid /
-  dropped-collision), world state, vocabulary summary
-- **vocabulary.json** — every symbol with usage, success rate, stability,
-  adopters, dominant context; convergence + extinction events
-- **benchmark.json** — per-round inference latency and trade counts
+The core workload is **parallel multi-agent LLM inference**: every round is
+three simultaneous forward passes issued concurrently, with measured
+parallel-vs-sequential latency reported per round in the dashboard and the
+benchmark card. That is precisely the serving pattern large-memory
+accelerators are built for. The LLM client speaks the OpenAI-compatible chat
+API — currently pointed at Fireworks serverless — and the backend resolver
+makes swapping the serving endpoint a configuration change, not a rewrite.
 
-## Known limitations
+## Security
 
-- In `visible` mode the emergent-language claim is deliberately modest
-  (conventions, not language); use `--semantics hidden` for the stronger
-  setting.
-- Heuristic symbols are template-minted (see provenance caveats above).
-- Agents can and do die: the economy was tuned (collection rates, respawn,
-  consumption interval, central commons) so that a 60-round no-key run is
-  watchable, but survival is not guaranteed — that pressure is what makes
-  trade worth inventing words for.
-- Benchmark "speedup" compares measured parallel latency against a
-  sequential *estimate* (×3), not a measured sequential run.
+API keys are never committed: the code reads `FIREWORKS_API_KEY` from the
+environment only, `.gitignore` blocks `.env` and local launchers, and
+[`.env.example`](.env.example) documents required names without values.
 
 ## License
 
-MIT.
+MIT — see [LICENSE](LICENSE). Built as an AMD hackathon submission.

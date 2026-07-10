@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="118" height="26" viewBox="0 0 118 26" role="img" aria-label="gradio 4.x">
+  <rect x="0.5" y="0.5" width="117" height="25" rx="3" fill="#0d0d0d" stroke="#2b2b2b"/>
+  <text x="10" y="17" font-family="Consolas,'Courier New',monospace" font-size="12" fill="#6f6f6f">[ gradio</text>
+  <text x="74" y="17" font-family="Consolas,'Courier New',monospace" font-size="12" font-weight="bold" fill="#f5f5f5">4.x</text>
+  <text x="98" y="17" font-family="Consolas,'Courier New',monospace" font-size="12" fill="#6f6f6f">]</text>
+</svg>

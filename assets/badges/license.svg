@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="26" viewBox="0 0 128 26" role="img" aria-label="license MIT">
+  <rect x="0.5" y="0.5" width="127" height="25" rx="3" fill="#0d0d0d" stroke="#2b2b2b"/>
+  <text x="10" y="17" font-family="Consolas,'Courier New',monospace" font-size="12" fill="#6f6f6f">[ license</text>
+  <text x="82" y="17" font-family="Consolas,'Courier New',monospace" font-size="12" font-weight="bold" fill="#f5f5f5">MIT</text>
+  <text x="108" y="17" font-family="Consolas,'Courier New',monospace" font-size="12" fill="#6f6f6f">]</text>
+</svg>

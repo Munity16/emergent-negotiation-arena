@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="132" height="26" viewBox="0 0 132 26" role="img" aria-label="tests: 84/84 passing">
+  <rect x="0.5" y="0.5" width="131" height="25" rx="3" fill="#0d0d0d" stroke="#2b2b2b"/>
+  <text x="10" y="17" font-family="Consolas,'Courier New',monospace" font-size="12" fill="#6f6f6f">[ tests</text>
+  <text x="66" y="17" font-family="Consolas,'Courier New',monospace" font-size="12" font-weight="bold" fill="#34d399">84/84</text>
+  <text x="112" y="17" font-family="Consolas,'Courier New',monospace" font-size="12" fill="#6f6f6f">]</text>
+</svg>
