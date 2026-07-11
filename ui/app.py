@@ -40,6 +40,12 @@ from agents.llm_agent import (
 REPLAY_FILE = os.getenv("REPLAY_FILE", "outputs/sample_run.json")
 OUTPUT_DIR = os.getenv("OUTPUT_DIR", "outputs")
 
+# Rounds bounds shared by the slider and the server-side clamp. The slider
+# enforces these only in the browser — a direct /start_simulation API call
+# bypasses it, and there is no stop control, so an unbounded run would hold
+# the shared instance (and grow the in-memory round log) for hours.
+ROUNDS_MIN, ROUNDS_MAX = 10, 500
+
 
 # ─────────────────────────────────────────────
 # Global simulation state
@@ -898,6 +904,14 @@ def refresh_all():
 def start_simulation(num_rounds: float, backend: str, seed: float, semantics: str) -> str:
     global _sim_thread, _sim, _running, _last_error, _active_backend, _backend_reason
 
+    # Validate before touching any state: a bad value that raised later
+    # (after _running is set) would wedge the demo in "already running".
+    try:
+        num_rounds = max(ROUNDS_MIN, min(int(num_rounds), ROUNDS_MAX))
+        seed = int(seed)
+    except (TypeError, ValueError):
+        return "❌ Cannot start: rounds and seed must be numbers."
+
     with _sim_lock:
         if _running:
             return "Simulation already running."
@@ -920,7 +934,7 @@ def start_simulation(num_rounds: float, backend: str, seed: float, semantics: st
 
     _sim_thread = threading.Thread(
         target=_run_simulation_thread,
-        args=(int(num_rounds), resolved, int(seed), semantics),
+        args=(num_rounds, resolved, seed, semantics),
         daemon=True,
     )
     _sim_thread.start()
@@ -1003,7 +1017,7 @@ def build_ui():
 
         with gr.Row():
             with gr.Column(scale=1):
-                num_rounds = gr.Slider(10, 500, value=100, step=10, label="Number of rounds")
+                num_rounds = gr.Slider(ROUNDS_MIN, ROUNDS_MAX, value=100, step=10, label="Number of rounds")
                 backend = gr.Radio(
                     ["auto", "fireworks", "heuristic", "replay"],
                     value="auto",
