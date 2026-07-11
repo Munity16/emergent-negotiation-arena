@@ -189,7 +189,12 @@ class GridWorld:
     """
 
     def __init__(self, seed: int = 42):
-        random.seed(seed)
+        # Instance-scoped RNG: seeding the global `random` module made runs
+        # non-reproducible whenever anything else in the process drew from it
+        # (the Gradio server does), silently breaking same-seed determinism
+        # and replay fidelity. Random(seed) yields the same stream the old
+        # global seeding did, so recorded sample runs replay unchanged.
+        self._rng = random.Random(seed)
         self.round: int = 0
         self.agents: Dict[str, AgentState] = {}
         self.resource_tiles: List[ResourceTile] = []
@@ -213,12 +218,12 @@ class GridWorld:
         """Place resource tiles: 3 per type in its home zone, plus a commons."""
         self.resource_tiles = []
         for resource, zones in RESOURCE_ZONES.items():
-            chosen = random.sample(zones, min(3, len(zones)))
+            chosen = self._rng.sample(zones, min(3, len(zones)))
             for pos in chosen:
                 self.resource_tiles.append(ResourceTile(
                     resource_type=resource,
                     position=pos,
-                    amount=random.randint(TILE_AMOUNT_MIN, TILE_AMOUNT_MAX),
+                    amount=self._rng.randint(TILE_AMOUNT_MIN, TILE_AMOUNT_MAX),
                 ))
         # A small central commons — one tile of each resource around the map
         # centre. It softens (without erasing) the quadrant scarcity: an agent
@@ -230,7 +235,7 @@ class GridWorld:
             self.resource_tiles.append(ResourceTile(
                 resource_type=resource,
                 position=pos,
-                amount=random.randint(TILE_AMOUNT_MIN, TILE_AMOUNT_MAX),
+                amount=self._rng.randint(TILE_AMOUNT_MIN, TILE_AMOUNT_MAX),
             ))
 
     # ── Observation ──
@@ -422,7 +427,7 @@ class GridWorld:
             if tile.amount == 0 and tile.respawn_in > 0:
                 tile.respawn_in -= 1
                 if tile.respawn_in == 0:
-                    tile.amount = random.randint(TILE_AMOUNT_MIN, TILE_AMOUNT_MAX)
+                    tile.amount = self._rng.randint(TILE_AMOUNT_MIN, TILE_AMOUNT_MAX)
 
     # ── Utility ──
 
