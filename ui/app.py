@@ -1037,7 +1037,8 @@ def build_ui():
                     ["visible", "hidden"],
                     value="visible",
                     label="Trade semantics shown to responder",
-                    info="visible = demo mode (responder sees offer/request) | "
+                    info="fireworks (LLM) backend only — heuristic/replay runs ignore it | "
+                         "visible = demo mode (responder sees offer/request) | "
                          "hidden = research mode (responder sees only the symbol + hints)",
                 )
                 seed = gr.Number(value=42, label="Random seed")

@@ -60,7 +60,8 @@ def parse_args():
     parser.add_argument("--replay-delay", type=float, default=0.05,
                         help="Pause per replayed round in seconds (default: 0.05)")
     parser.add_argument("--semantics", choices=["visible", "hidden"], default="visible",
-                        help="'visible': responder sees the full offer/request (demo mode). "
+                        help="Fireworks (LLM) backend only — heuristic/replay runs ignore it. "
+                             "'visible': responder sees the full offer/request (demo mode). "
                              "'hidden': responder sees only the symbol + coarse hints and must "
                              "infer meaning from experience (research mode)")
     parser.add_argument("--seed", type=int, default=42,
