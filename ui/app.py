@@ -23,6 +23,14 @@ import threading
 import time
 from pathlib import Path
 
+# Same guard as main.py: Windows consoles often default to a legacy code page
+# (cp1252) that cannot encode the box-drawing/arrow characters the simulation
+# prints — without this, the run thread dies mid-simulation with a
+# UnicodeEncodeError when app.py is the entrypoint.
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+    sys.stderr.reconfigure(encoding="utf-8", errors="replace")
+
 import gradio as gr
 
 # Add parent to path
