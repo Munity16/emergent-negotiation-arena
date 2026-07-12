@@ -259,13 +259,12 @@ scripts/                 demo/video helper scripts
 assets/                  branding, badges, demo gif
 ```
 
-## AMD Hackathon Relevance
+## Parallel Inference Design
 
 The core workload is **parallel multi-agent LLM inference**: every round is
 three agent decisions executed concurrently with `asyncio.gather`, with
 measured parallel-vs-sequential latency reported per round in the dashboard
-and the benchmark card. That is precisely the serving pattern large-memory
-accelerators are built for. The LLM client speaks the OpenAI-compatible chat
+and the benchmark card. The LLM client speaks the OpenAI-compatible chat
 API — currently pointed at Fireworks serverless — and the backend resolver
 makes swapping the serving endpoint a configuration change, not a rewrite.
 
@@ -288,10 +287,8 @@ makes swapping the serving endpoint a configuration change, not a rewrite.
   the stricter research configuration.
 - Heuristic-backend symbols are template-minted, not LLM-emergent, and are
   labelled as such; non-LLM timings are marked "NOT live measurements".
-- The application does not currently run on AMD hardware; the relevance is
-  the honestly-described parallel-inference serving pattern above.
 - Free-tier hosting sleeps after inactivity (cold-start delay on first load).
 
 ## License
 
-MIT — see [LICENSE](LICENSE). Built as an AMD hackathon submission.
+MIT — see [LICENSE](LICENSE).
