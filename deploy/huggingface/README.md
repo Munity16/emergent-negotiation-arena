@@ -13,4 +13,4 @@ license: mit
 
 Three AI agents. No shared language. They must invent one to survive.
 
-This is the Hugging Face Space deployment configuration for the live AMD hackathon demo.
+This is the Hugging Face Space deployment configuration for the live demo.
