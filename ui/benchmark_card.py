@@ -29,12 +29,12 @@ from matplotlib.patches import FancyBboxPatch
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-# ── AMD-adjacent, high-contrast dev-tool palette ──
+# ── High-contrast dev-tool palette ──
 BG = "#0B0B0E"
 PANEL = "#141418"
 INK = "#F5F3EE"
 MUTED = "#8A8A93"
-AMD_RED = "#ED1C24"
+ARENA_RED = "#ED1C24"
 ACCENT_GREEN = "#3DDC84"
 GRID_LINE = "#26262C"
 
@@ -100,7 +100,7 @@ def generate_benchmark_card(input_path: str, output_path: str) -> str:
     )
     ax_head.text(
         0.0, 0.52, f"{speedup:.2f}\u00d7 SPEEDUP",
-        transform=ax_head.transAxes, fontsize=44, color=AMD_RED,
+        transform=ax_head.transAxes, fontsize=44, color=ARENA_RED,
         fontweight="black", ha="left", va="top", family="sans-serif",
     )
     ax_head.text(
@@ -116,7 +116,7 @@ def generate_benchmark_card(input_path: str, output_path: str) -> str:
 
     labels = ["Sequential\n(3 calls, one-at-a-time)", "Parallel\n(asyncio.gather)"]
     values = [sequential_ms, parallel_ms]
-    colors = [MUTED, AMD_RED]
+    colors = [MUTED, ARENA_RED]
 
     bar_x = [0, 1]
     bars = ax.bar(bar_x, values, width=0.55, color=colors, zorder=3,
@@ -166,7 +166,7 @@ def generate_benchmark_card(input_path: str, output_path: str) -> str:
     )
     ax_foot.text(
         1.0, 0.5, "Emergent Negotiation Arena",
-        transform=ax_foot.transAxes, fontsize=9.5, color=AMD_RED,
+        transform=ax_foot.transAxes, fontsize=9.5, color=ARENA_RED,
         family="monospace", fontweight="bold", ha="right", va="center",
     )
 

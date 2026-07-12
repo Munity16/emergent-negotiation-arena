@@ -103,7 +103,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
     --ink: #f5f3ee;
     --muted: #8a8a93;
     --grid: #26262c;
-    --amd-red: #ed1c24;
+    --arena-red: #ed1c24;
     --accent-green: #3ddc84;
   }
   * { box-sizing: border-box; }
@@ -121,7 +121,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
     margin: 0; font-size: 20px; letter-spacing: 0.04em;
     font-family: "SFMono-Regular", Consolas, monospace; font-weight: 700;
   }
-  #header h1 span { color: var(--amd-red); }
+  #header h1 span { color: var(--arena-red); }
   #header p { margin: 4px 0 0; font-size: 12.5px; color: var(--muted); max-width: 640px; }
   #legend {
     position: fixed; bottom: 18px; left: 26px; z-index: 10;
