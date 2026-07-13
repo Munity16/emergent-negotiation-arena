@@ -949,6 +949,30 @@ def start_simulation(num_rounds: float, backend: str, seed: float, semantics: st
     return f"▶ Started on backend '{resolved}' — {reason}"
 
 
+def update_round_control(backend: str):
+    """Keep the rounds slider honest about what the backend will actually run.
+
+    Replay is a byte-exact playback of a recorded log, so its round count is
+    fixed by the recording — lock the slider to that value. Every other
+    backend honours the user's choice, so re-enable it.
+    """
+    if backend == "replay":
+        try:
+            _, recorded = load_replay_file(REPLAY_FILE)
+        except Exception:
+            # Missing/corrupt replay file: leave the slider untouched; the
+            # backend resolver surfaces the real error on start.
+            return gr.update()
+        recorded_rounds = len(recorded)
+        return gr.update(
+            value=recorded_rounds,
+            interactive=False,
+            info=f"replay plays back the recorded run exactly as logged — "
+                 f"{recorded_rounds} rounds",
+        )
+    return gr.update(interactive=True, info=None)
+
+
 # ─────────────────────────────────────────────
 # Gradio app
 # ─────────────────────────────────────────────
@@ -1089,6 +1113,12 @@ def build_ui():
         # progress UI would flash a skeleton over every panel on each tick.
         refresh_btn.click(fn=refresh_all, inputs=[], outputs=all_outputs,
                           show_progress="hidden")
+
+        # Replay's round count is fixed by the recording — reflect that in
+        # the slider instead of letting the user pick a number that the run
+        # will ignore.
+        backend.change(fn=update_round_control, inputs=[backend],
+                       outputs=[num_rounds])
 
         # Populate the dashboard once on page load; the POLL_JS interval
         # keeps it fresh afterwards by clicking the refresh button.
